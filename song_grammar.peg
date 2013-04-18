@@ -1,0 +1,46 @@
+/* Song Grammar for PEG js
+
+http://pegjs.majda.cz/online
+
+4/4
+20x song section @0:3.5
+4x song section @1:0
+
+
+*/
+
+start
+  = songSection*
+
+songSection
+  = timeSignature:timeSignature? songLine
+
+songLine
+  = repetition:integer "x " sectionName:[^@]+ startTime:time? "\n"?
+    { return {
+        repetition: repetition,
+        sectionName: sectionName.join(""),
+        startTime: startTime
+      };
+    }
+
+timeSignature
+  = beats:integer "/" noteValue:integer "\n"?
+    { return {
+        beats: beats,
+        noteValue: noteValue
+      };
+    }
+
+time
+  = "@"? minutes:integer ":" seconds:number {return {minutes: minutes, seconds: seconds};}
+
+number
+  = decimal
+  / integer
+
+decimal "decimal"
+  = whole:[0-9]+ "." parts:[0-9]+ { return parseFloat(whole.concat(".").concat(parts).join("")); }
+
+integer "integer"
+  = digits:[0-9]+ { return parseInt(digits.join(""), 10); }

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+  <head>
+    <script type="text/javascript" src="./underscore-min.js"></script>
+    <script type="text/javascript" src="./jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="./peg-0.7.0.min.js"></script>
+    <script type="text/javascript" src="./tapalot.js"></script>
+    <script type="text/javascript" src="./dragdropper.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="./tapalot_styles.css"/>
+  </head>
+  <body>
+    <h1>Tapalot</h1>
+    <div id="heartbeat" >
+      HEARTBEAT
+    </div>
+    <div id="drop_zone">Drop Song Grammar And Music File Here</div>
+    <audio controls id="player"/>
+  </body>
+
+  <script type="text/javascript">
+    (function($){
+      var tapalot = $("#player").tapalot();
+      window.tapalot = tapalot;
+
+      $("#drop_zone").dragdropper();
+     })(jQuery);
+  </script>
+</html>

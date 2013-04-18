@@ -1,0 +1,42 @@
+@-webkit-keyframes heartbeatanimation {
+  0%   { -webkit-transform: scale(1.4, 1.4) translate(0px, 0px)   ; }
+  10%  { -webkit-transform: scale(1.35, 1.35) translate(1px, 0px) ; }
+  20%  { -webkit-transform: scale(1.3, 1.3) translate(2px, 0px)  ; }
+  30%  { -webkit-transform: scale(1.25, 1.25) translate(3px, 0px)    ; }
+  40%  { -webkit-transform: scale(1.2, 1.2) translate(4px, 0px)  ; }
+  50%  { -webkit-transform: translate(5px, 0px)  ; }
+  60%  { -webkit-transform: translate(4px, 0px)  ; }
+  70%  { -webkit-transform: translate(3px, 0px)   ; }
+  80%  { -webkit-transform: translate(2px, 0px) ; }
+  90%  { -webkite-transform: translate(1px, 0px)   ; }
+  100% { -webkite-transform: translate(0px, 0px)  ; }
+}
+
+.heartbeat {
+  -webkit-animation-name: 'heartbeatanimation';
+  -webkit-animation-duration: 9000ms;
+  -webkit-transform-origin:0% 0%;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: linear;
+}
+
+
+.heartbeat {
+  display:block;
+  position:relative;
+}
+a,
+.heartbeat.inline {
+  display:inline-block
+}
+
+#drop_zone {
+  border: 2px dashed #bbb;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  padding: 25px;
+  text-align: center;
+  font: 20pt bold 'Vollkorn';
+  color: #bbb;
+}
