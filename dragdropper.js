@@ -6,8 +6,13 @@
       return _.last(fileName.split('.')).toLowerCase();
     };
 
-    var handleFinishReadingFile = function(evt){
-      console.log("done reading");
+    var handleFinishReadingTXT = function(evt){
+      var newEvent = $.Event("receivedTXT");
+      newEvent.contents = evt.target.result;
+      $this.trigger(newEvent)
+    };
+
+    var handleFinishReadingPEG = function(evt){
       var newEvent = $.Event("receivedPEG");
       newEvent.contents = evt.target.result;
       $this.trigger(newEvent)
@@ -34,7 +39,12 @@
             break;
           case "peg":
             var fr = new FileReader();
-            fr.onload = handleFinishReadingFile;
+            fr.onload = handleFinishReadingPEG;
+            fr.readAsText(f);
+            break;
+          case "txt":
+            var fr = new FileReader();
+            fr.onload = handleFinishReadingTXT;
             fr.readAsText(f);
             break;
         }
@@ -45,7 +55,7 @@
     $this.on('dragover', handleDragOver);
     $this.on('drop', handleFileSelect);
 
-    $this.on();
+    return $this;
   };
   $.fn.dragdropper = dragdropper_init;
 })(jQuery);

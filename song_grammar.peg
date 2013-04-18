@@ -6,26 +6,25 @@ http://pegjs.majda.cz/online
 20x song section @0:3.5
 4x song section @1:0
 
-
 */
 
 start
-  = songSection*
+  = songSection+
 
 songSection
-  = timeSignature:timeSignature? songLine
+  = timeSignature:timeSignature? songLines:songLine+ { return { timeSignature: timeSignature, songLines: songLines } }
 
 songLine
-  = repetition:integer "x " sectionName:[^@]+ startTime:time? "\n"?
+  = repetition:integer "x " lineText:[^@\n]+ startTime:time? "\n"*
     { return {
         repetition: repetition,
-        sectionName: sectionName.join(""),
+        lineText: lineText.join(""),
         startTime: startTime
       };
     }
 
 timeSignature
-  = beats:integer "/" noteValue:integer "\n"?
+  = beats:integer "/" noteValue:integer "\n"*
     { return {
         beats: beats,
         noteValue: noteValue
@@ -44,3 +43,4 @@ decimal "decimal"
 
 integer "integer"
   = digits:[0-9]+ { return parseInt(digits.join(""), 10); }
+

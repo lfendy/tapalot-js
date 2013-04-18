@@ -1,11 +1,9 @@
 (function($){
-  var tapalot_init = function(){
+  var player_init = function(){
 
     var player = this[0];
-    var parse = function(songScript){
-    };
 
-    var setMusicSource = function(source){
+    var setSongSource = function(source){
       player.src = source;
     }
 
@@ -25,21 +23,16 @@
       player.currentTime = songLocation;
     };
 
-    var setViewDelay = function(viewDelay){
-    };
-
     return {
-      parse: parse,
       play: play,
       pause: pause,
       rewind: rewind,
       seek: seek,
-      setViewDelay: setViewDelay,
-      setMusicSource: setMusicSource
+      setSongSource: setSongSource
     };
   }
 
-  $.fn.tapalot = tapalot_init;
+  $.fn.audioPlayer = player_init;
 })(jQuery);
 
 

@@ -3,8 +3,9 @@
     <script type="text/javascript" src="./underscore-min.js"></script>
     <script type="text/javascript" src="./jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="./peg-0.7.0.min.js"></script>
-    <script type="text/javascript" src="./tapalot.js"></script>
+    <script type="text/javascript" src="./audio_player.js"></script>
     <script type="text/javascript" src="./dragdropper.js"></script>
+    <script type="text/javascript" src="./renderer.js"></script>
     <link rel="stylesheet" type="text/css" media="screen" href="./tapalot_styles.css"/>
   </head>
   <body>
@@ -12,16 +13,55 @@
     <div id="heartbeat" >
       HEARTBEAT
     </div>
-    <div id="drop_zone">Drop Song Grammar And Music File Here</div>
+    <div id="drop_zone">Drop Song, Grammar And Audio File Here</div>
+    <div id="display"></div>
     <audio controls id="player"/>
   </body>
 
   <script type="text/javascript">
     (function($){
-      var tapalot = $("#player").tapalot();
-      window.tapalot = tapalot;
+      var audioPlayer = $("#player").audioPlayer();
+      window.audioPlayer = audioPlayer;
 
-      $("#drop_zone").dragdropper();
+      var parser = null;
+      var rawSongStructure = null;
+      var songStructure = null;
+
+      var parseSong = function(){
+        if(parser != null && rawSongStructure != null){
+          songStructure = parser.parse(rawSongStructure);
+          $("#display").renderer(songStructure);
+          window.songStructure = songStructure;
+        }
+      };
+
+      var handleReceivedSong = function(evt){
+        console.log("received audio");
+        audioPlayer.setSongSource(evt.url);
+      };
+
+      var handleReceivedGrammar = function(evt){
+        console.log("received grammar");
+        var grammar = evt.contents;
+        parser = PEG.buildParser(grammar);
+        parseSong();
+        window.grammar = grammar;
+        window.parser = parser;
+      };
+
+      var handleReceivedSongStructure = function(evt){
+        console.log("received song structure");
+        rawSongStructure = evt.contents;
+        parseSong();
+        window.rawSongStructure = rawSongStructure;
+      };
+
+      $("#drop_zone")
+        .dragdropper()
+        .on("receivedMP3", handleReceivedSong)
+        .on("receivedPEG", handleReceivedGrammar)
+        .on("receivedTXT", handleReceivedSongStructure);
+
      })(jQuery);
   </script>
 </html>
