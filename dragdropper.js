@@ -8,7 +8,8 @@
 
     var handleFinishReadingFile = function(evt){
       console.log("done reading");
-      var newEvent = new Event();
+      var newEvent = $.Event("receivedPEG");
+      newEvent.contents = evt.target.result;
       $this.trigger(newEvent)
     };
 
@@ -27,8 +28,9 @@
         switch(getFileExtension(f.name)){
           case "mp3":
             var url = URL.createObjectURL(f);
-            var newEvent = new Event();
-            $this.trigger(newEvent)
+            var newEvent = $.Event("receivedMP3");
+            newEvent.url = url;
+            $this.trigger(newEvent);
             break;
           case "peg":
             var fr = new FileReader();
