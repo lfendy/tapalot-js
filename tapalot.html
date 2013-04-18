@@ -20,8 +20,7 @@
 
   <script type="text/javascript">
     (function($){
-      var audioPlayer = $("#player").audioPlayer();
-      window.audioPlayer = audioPlayer;
+      var player = $("#player").audioPlayer();
 
       var parser = null;
       var rawSongStructure = null;
@@ -37,7 +36,7 @@
 
       var handleReceivedSong = function(evt){
         console.log("received audio");
-        audioPlayer.setSongSource(evt.url);
+        player.audioPlayer("setSongSource", evt.url);
       };
 
       var handleReceivedGrammar = function(evt){
