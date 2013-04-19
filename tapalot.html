@@ -6,6 +6,7 @@
     <script type="text/javascript" src="./audio_player.js"></script>
     <script type="text/javascript" src="./dragdropper.js"></script>
     <script type="text/javascript" src="./renderer.js"></script>
+    <script type="text/javascript" src="./composer.js"></script>
     <link rel="stylesheet" type="text/css" media="screen" href="./tapalot_styles.css"/>
   </head>
   <body>
@@ -29,7 +30,9 @@
       var parseSong = function(){
         if(parser != null && rawSongStructure != null){
           songStructure = parser.parse(rawSongStructure);
-          $("#display").renderer(songStructure);
+          $("#display")
+            .renderer(songStructure)
+            .composer(songStructure, player);
           window.songStructure = songStructure;
         }
       };

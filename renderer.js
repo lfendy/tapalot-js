@@ -1,7 +1,7 @@
 (function($){
 
   const PLAYING = "playing";
-  const SONG = "song";
+  const SONGLINE = "song_line";
 
   var getId = function(idxSection, idxLine){
     return "rendered_section_" + idxSection.toString() + "_line_" + idxLine.toString();
@@ -15,7 +15,7 @@
       $newDiv
         .append(songLine.lineText)
         .attr("id", id)
-        .addClass("song");
+        .addClass(SONGLINE);
 
       $this.append($newDiv);
     };
@@ -42,7 +42,7 @@
   };
 
   var unhighlight = function(){
-    $("div." + SONG).removeClass(PLAYING);
+    $("div." + SONGLINE).removeClass(PLAYING);
   };
 
   var highlight = function(idxSection, idxLine){

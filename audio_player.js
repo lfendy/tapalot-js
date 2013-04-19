@@ -22,16 +22,24 @@
     player.currentTime = 0;
   };
 
-  var seek = function(songLocation){
+  var setCurrentTime = function(songLocation){
     player.currentTime = songLocation;
+  };
+
+  var getCurrentTime = function(){
+    var time = player.currentTime;
+    var minutes = Math.floor(time / 60);
+    var seconds = time - (minutes * 60);
+    return { minutes:minutes, seconds:seconds };
   };
 
   var methods = {
     init: init,
-    play: play,
     pause: pause,
+    play: play,
     rewind: rewind,
-    seek: seek,
+    getCurrentTime: getCurrentTime,
+    setCurrentTime: setCurrentTime,
     setSongSource: setSongSource
   };
 
