@@ -40,3 +40,14 @@ a,
   font: 20pt bold 'Vollkorn';
   color: #bbb;
 }
+
+.song {
+  color: #222;
+  font: 18pt 'Arial';
+}
+
+.playing {
+  color: blue;
+  font: 20pt bold 'Arial';
+}
+

@@ -1,16 +1,21 @@
 (function($){
-  var renderer_init = function(givenSongStructure){
-    var $this = $(this);
 
-    var getId = function(idxSection, idxLine){
-      return "rendered_section_" + idxSection.toString() + "_line_" + idxLine.toString();
-    };
+  const PLAYING = "playing";
+  const SONG = "song";
+
+  var getId = function(idxSection, idxLine){
+    return "rendered_section_" + idxSection.toString() + "_line_" + idxLine.toString();
+  };
+
+  var init = function(givenSongStructure){
+    var $this = $(this);
 
     var renderLine = function(id, songLine){
       var $newDiv = $(document.createElement('div'));
       $newDiv
         .append(songLine.lineText)
-        .attr("id", id);
+        .attr("id", id)
+        .addClass("song");
 
       $this.append($newDiv);
     };
@@ -35,5 +40,32 @@
 
     return $this;
   };
-  $.fn.renderer = renderer_init;
+
+  var unhighlight = function(){
+    $("div." + SONG).removeClass(PLAYING);
+  };
+
+  var highlight = function(idxSection, idxLine){
+    unhighlight();
+    var id = getId(idxSection, idxLine);
+    $("#" + id).addClass(PLAYING);
+  };
+
+  var methods = {
+    init: init,
+    highlight: highlight
+  };
+
+
+  var methodInvoker = function(methodOrOptions) {
+    if ( methods[methodOrOptions] ) {
+      return methods[ methodOrOptions ].apply( this, Array.prototype.slice.call( arguments, 1 ));
+    } else if ( typeof methodOrOptions === 'object' || ! methodOrOptions ) {
+      return methods.init.apply( this, arguments );
+    } else {
+      $.error( 'Method ' +  method + ' does not exist' );
+    }
+  };
+
+  $.fn.renderer = methodInvoker;
 })(jQuery);
