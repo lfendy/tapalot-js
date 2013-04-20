@@ -37,23 +37,23 @@
         }
       };
 
-      var handleReceivedSong = function(evt){
+      var handleReceivedSong = function(evt, data){
         console.log("received audio");
-        player.audioPlayer("setSongSource", evt.url);
+        player.audioPlayer("setSongSource", data.url);
       };
 
-      var handleReceivedGrammar = function(evt){
+      var handleReceivedGrammar = function(evt, data){
         console.log("received grammar");
-        var grammar = evt.contents;
+        var grammar = data.contents;
         parser = PEG.buildParser(grammar);
         parseSong();
         window.grammar = grammar;
         window.parser = parser;
       };
 
-      var handleReceivedSongStructure = function(evt){
+      var handleReceivedSongStructure = function(evt, data){
         console.log("received song structure");
-        rawSongStructure = evt.contents;
+        rawSongStructure = data.contents;
         parseSong();
         window.rawSongStructure = rawSongStructure;
       };

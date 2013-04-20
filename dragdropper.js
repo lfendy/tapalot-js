@@ -7,15 +7,13 @@
     };
 
     var handleFinishReadingTXT = function(evt){
-      var newEvent = $.Event("receivedTXT");
-      newEvent.contents = evt.target.result;
-      $this.trigger(newEvent)
+      var data = {contents: evt.target.result};
+      $this.trigger("receivedTXT", data);
     };
 
     var handleFinishReadingPEG = function(evt){
-      var newEvent = $.Event("receivedPEG");
-      newEvent.contents = evt.target.result;
-      $this.trigger(newEvent)
+      var data = {contents: evt.target.result};
+      $this.trigger("receivedPEG", data);
     };
 
     var handleDragOver = function(evt){
@@ -33,9 +31,8 @@
         switch(getFileExtension(f.name)){
           case "mp3":
             var url = URL.createObjectURL(f);
-            var newEvent = $.Event("receivedMP3");
-            newEvent.url = url;
-            $this.trigger(newEvent);
+            var data = {url: url}
+            $this.trigger("receivedMP3", data);
             break;
           case "peg":
             var fr = new FileReader();

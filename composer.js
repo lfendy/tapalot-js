@@ -26,6 +26,7 @@
     console.log(id);
     var idx = getIdxFromId(id);
     assignTimeToSongLine(idx.idxSection, idx.idxLine);
+
   };
 
   var init = function(givenSongStructure, givenPlayer){
