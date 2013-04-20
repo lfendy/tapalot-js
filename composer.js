@@ -42,10 +42,8 @@
     $this.on("click", "." + COMPOSABLE, handleClickSongLine);
     songStructure = givenSongStructure;
     player = givenPlayer;
-    enabled(true);
     return $this;
   };
-
 
   var methods = {
     init: init,

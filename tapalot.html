@@ -14,6 +14,7 @@
     <div id="heartbeat" >
       HEARTBEAT
     </div>
+    <input type="checkbox" id="composingModeCheckbox">Composing mode</input>
     <div id="drop_zone">Drop Song, Grammar And Audio File Here</div>
     <div id="display"></div>
     <audio controls id="player"/>
@@ -27,6 +28,24 @@
       var rawSongStructure = null;
       var songStructure = null;
 
+      var changeToComposingMode = function(){
+        $("#display").composer('enabled', true);
+      };
+
+      var changeToPlayingMode = function(){
+        $("#display").composer('enabled', false);
+      };
+
+      var handleComposingModeChange = function(evt){
+          if($(evt.target).is(":checked")){
+            changeToComposingMode();
+          } else {
+            changeToPlayingMode();
+          }
+      };
+
+      var highlightLine = function(evt, songLine){};
+
       var rerenderLine = function(evt, songLine){
         $("#display").children().removeClass("pulse");
         $(evt.target).addClass("pulse");
@@ -39,7 +58,9 @@
           $("#display")
             .renderer(songStructure)
             .composer(songStructure, player)
-            .on("rerenderLine", rerenderLine);
+            .on("rerenderLine", rerenderLine)
+            .conductor(songStructure, player)
+            .on("highlightLine", highlightLine);
           window.songStructure = songStructure;
         }
       };
@@ -70,6 +91,9 @@
         .on("receivedMP3", handleReceivedAudio)
         .on("receivedPEG", handleReceivedGrammar)
         .on("receivedTXT", handleReceivedSongStructure);
+
+      $("#composingModeCheckbox")
+        .on("change", handleComposingModeChange);
 
      })(jQuery);
   </script>
