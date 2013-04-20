@@ -4,11 +4,31 @@
   const SONGLINE = "song_line";
 
   var getId = function(idxSection, idxLine){
-    return "rendered_section_" + idxSection.toString() + "_line_" + idxLine.toString();
+    return "section_" + idxSection.toString() + "_line_" + idxLine.toString();
   };
 
-  var init = function(givenSongStructure){
-    var $this = $(this);
+  var textRenderer = function(){
+    var renderTimeSignature = function(timeSignature){
+      return timeSignature.beats + "/" + timeSignature.noteValue;
+    };
+
+    var renderLine = function(id, songLine){
+      var repetition = songLine.repetition;
+      var text = songLine.lineText;
+      var startTime = songLine.startTime == null || songLine.startTime.minutes == null ? "" : " @" + songLine.startTime.minutes + ":" + songLine.startTime.seconds;
+      return repetition + "x " + text + startTime;
+    };
+
+    return {
+      renderLine: renderLine,
+      renderTimeSignature: renderTimeSignature
+    };
+  };
+
+  var htmlRenderer = function(){
+    var renderTimeSignature = function(timeSignature){
+      return null;
+    };
 
     var renderLine = function(id, songLine){
       var $newDiv = $(document.createElement('div'));
@@ -17,26 +37,48 @@
         .attr("id", id)
         .addClass(SONGLINE);
 
-      $this.append($newDiv);
+      return $newDiv;
     };
 
-    var renderLines = function(songLines, idxSection){
-      _.each(songLines, function(songLine, idxLine){
-        renderLine(getId(idxSection, idxLine), songLine);
-      });
+    return {
+      renderLine: renderLine,
+      renderTimeSignature: renderTimeSignature
     };
+  };
 
-    var renderSections = function(songStructure){
-      _.each(songStructure, function(songSection, idxSection){
-        renderLines(songSection.songLines, idxSection);
-      });
-    };
+
+
+  var renderLines = function(songLines, idxSection, renderer){
+    return _.map(songLines, function(songLine, idxLine){
+      return renderer.renderLine(getId(idxSection, idxLine), songLine);
+    });
+  };
+
+  var renderSections = function(songStructure, renderer){
+    return _.flatten(_.map(songStructure, function(songSection, idxSection){
+      var ts = renderer.renderTimeSignature(songSection.timeSignature);
+      return [ts].concat(renderLines(songSection.songLines, idxSection, renderer));
+    }));
+  };
+
+
+  var renderText = function(givenSongStructure){
+    return renderSections(givenSongStructure, textRenderer()).join("\n");;
+  };
+
+  var init = function(givenSongStructure){
+    var $this = $(this);
 
     var clear = function(){
       $this.children().remove();
     };
 
-    renderSections(givenSongStructure);
+    var renderHtml = function(givenSongStructure){
+      $this.append(renderSections(givenSongStructure, htmlRenderer()));
+    };
+
+    clear();
+    renderHtml(givenSongStructure);
 
     return $this;
   };
@@ -53,7 +95,8 @@
 
   var methods = {
     init: init,
-    highlight: highlight
+    highlight: highlight,
+    renderText: renderText
   };
 
 

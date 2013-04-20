@@ -1,7 +1,7 @@
 (function($){
   const SONGLINE = "song_line";
 
-  var idxFromIdGrammar = 'indexes = "rendered_section_" idxSection:[0-9]+ "_line_" idxLine:[0-9]+ {return { idxSection: parseInt(idxSection.join("")), idxLine: parseInt(idxLine.join("")) };}';
+  var idxFromIdGrammar = 'indexes = "section_" idxSection:[0-9]+ "_line_" idxLine:[0-9]+ {return { idxSection: parseInt(idxSection.join("")), idxLine: parseInt(idxLine.join("")) };}';
   var idxFromIdParser = PEG.buildParser(idxFromIdGrammar);
   var songStructure;
   var player;

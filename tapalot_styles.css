@@ -8,8 +8,13 @@
   60%  { -webkit-transform: translate(4px, 0px)  ; }
   70%  { -webkit-transform: translate(3px, 0px)   ; }
   80%  { -webkit-transform: translate(2px, 0px) ; }
-  90%  { -webkite-transform: translate(1px, 0px)   ; }
-  100% { -webkite-transform: translate(0px, 0px)  ; }
+  90%  { -webkit-transform: translate(1px, 0px)   ; }
+  100% { -webkit-transform: translate(0px, 0px)  ; }
+}
+
+@-webkit-keyframes pulseanimation {
+  0%, 100%   { opacity: 1; }
+  20%        { opacity: 0; }
 }
 
 .heartbeat {
@@ -17,6 +22,13 @@
   -webkit-animation-duration: 9000ms;
   -webkit-transform-origin:0% 0%;
   -webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: linear;
+}
+
+.pulse {
+  -webkit-animation-name: 'pulseanimation';
+  -webkit-animation-duration: 1000ms;
+  -webkit-animation-iteration-count: 1;
   -webkit-animation-timing-function: linear;
 }
 
@@ -50,4 +62,5 @@ a,
   color: blue;
   font: 20pt bold 'Arial';
 }
+
 
