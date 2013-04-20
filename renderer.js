@@ -32,8 +32,9 @@
 
     var renderLine = function(id, songLine){
       var $newDiv = $(document.createElement('div'));
+      var text = textRenderer().renderLine(id, songLine);
       $newDiv
-        .append(songLine.lineText)
+        .append(text)
         .attr("id", id)
         .addClass(SONGLINE);
 
@@ -61,6 +62,10 @@
     }));
   };
 
+  var rerenderLine = function(element, songLine){
+    var $element = $(element);
+    $element.text(textRenderer().renderLine(null,songLine));
+  };
 
   var renderText = function(givenSongStructure){
     return renderSections(givenSongStructure, textRenderer()).join("\n");;
@@ -96,6 +101,7 @@
   var methods = {
     init: init,
     highlight: highlight,
+    rerenderLine: rerenderLine,
     renderText: renderText
   };
 

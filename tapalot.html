@@ -27,17 +27,24 @@
       var rawSongStructure = null;
       var songStructure = null;
 
+      var rerenderLine = function(evt, songLine){
+        $("#display").children().removeClass("pulse");
+        $(evt.target).addClass("pulse");
+        $("#display").renderer("rerenderLine", evt.target, songLine);
+      };
+
       var parseSong = function(){
         if(parser != null && rawSongStructure != null){
           songStructure = parser.parse(rawSongStructure);
           $("#display")
             .renderer(songStructure)
-            .composer(songStructure, player);
+            .composer(songStructure, player)
+            .on("rerenderLine", rerenderLine);
           window.songStructure = songStructure;
         }
       };
 
-      var handleReceivedSong = function(evt, data){
+      var handleReceivedAudio = function(evt, data){
         console.log("received audio");
         player.audioPlayer("setSongSource", data.url);
       };
@@ -60,7 +67,7 @@
 
       $("#drop_zone")
         .dragdropper()
-        .on("receivedMP3", handleReceivedSong)
+        .on("receivedMP3", handleReceivedAudio)
         .on("receivedPEG", handleReceivedGrammar)
         .on("receivedTXT", handleReceivedSongStructure);
 

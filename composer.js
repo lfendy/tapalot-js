@@ -1,7 +1,7 @@
 (function($){
-  const SONGLINE = "song_line";
+  const COMPOSABLE = "composable";
 
-  var idxFromIdGrammar = 'indexes = "section_" idxSection:[0-9]+ "_line_" idxLine:[0-9]+ {return { idxSection: parseInt(idxSection.join("")), idxLine: parseInt(idxLine.join("")) };}';
+  var idxFromIdGrammar = 'indexes = "section_" section:[0-9]+ "_line_" line:[0-9]+ {return { section: parseInt(section.join("")), line: parseInt(line.join("")) };}';
   var idxFromIdParser = PEG.buildParser(idxFromIdGrammar);
   var songStructure;
   var player;
@@ -14,8 +14,7 @@
     return player.audioPlayer('getCurrentTime');
   };
 
-  var assignTimeToSongLine = function(idxSection, idxLine){
-    var songLine = songStructure[idxSection].songLines[idxLine];
+  var assignTime = function(songLine){
     songLine.startTime = getSongTime();
     console.dir(songLine);
   };
@@ -23,22 +22,34 @@
   var handleClickSongLine = function(evt){
     var $songLine = $(evt.target);
     var id = $songLine.attr("id");
-    console.log(id);
     var idx = getIdxFromId(id);
-    assignTimeToSongLine(idx.idxSection, idx.idxLine);
+    var songLine = songStructure[idx.section].songLines[idx.line];
+    assignTime(songLine);
+    $songLine.trigger("rerenderLine", songLine);
+    console.log(id);
+  };
 
+  var enabled = function(isEnabled){
+    if(isEnabled){
+      this.children().addClass(COMPOSABLE);
+    } else {
+      this.children().removeClass(COMPOSABLE);
+    }
   };
 
   var init = function(givenSongStructure, givenPlayer){
     var $this = this;
-    $this.on("click", "." + SONGLINE, handleClickSongLine);
+    $this.on("click", "." + COMPOSABLE, handleClickSongLine);
     songStructure = givenSongStructure;
     player = givenPlayer;
+    enabled(true);
     return $this;
   };
 
+
   var methods = {
-    init: init
+    init: init,
+    enabled: enabled
   };
 
 

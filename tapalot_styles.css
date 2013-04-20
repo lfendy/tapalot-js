@@ -14,7 +14,7 @@
 
 @-webkit-keyframes pulseanimation {
   0%, 100%   { opacity: 1; }
-  20%        { opacity: 0; }
+  5%        { opacity: 0.3; }
 }
 
 .heartbeat {
@@ -27,7 +27,7 @@
 
 .pulse {
   -webkit-animation-name: 'pulseanimation';
-  -webkit-animation-duration: 1000ms;
+  -webkit-animation-duration: 600ms;
   -webkit-animation-iteration-count: 1;
   -webkit-animation-timing-function: linear;
 }
