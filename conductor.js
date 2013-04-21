@@ -5,21 +5,56 @@
   var songStructure;
   var player;
   var timing;
+  var display;
+  var interval;
 
-  var createTiming = function(songStructure){
-    _.map(songStructure, function(section, idxSection){
-    });
-    return {};
+  // hack... States ?
+  var currentTimeSlice;
+
+  var getTotalSeconds = function(startTime){
+    return (parseInt(startTime.minutes) * 60) + parseFloat(startTime.seconds);
   };
 
-  var play = function(){};
-  var pause = function(){};
+  var triggerHighlight = function(){
+    var currentTime = getTotalSeconds(player.audioPlayer('getCurrentTime'));
+      if(currentTimeSlice != undefined && currentTimeSlice.startTime <= currentTime){
+        display.trigger('highlightLine', [currentTimeSlice.section, currentTimeSlice.line]);
+        var idx = _.indexOf(timing, currentTimeSlice);
+        currentTimeSlice = timing[idx + 1];
+      }
+  };
+
+  var createTiming = function(songStructure){
+    var sectionTimings = _.map(songStructure, function(section, idxSection, sections){
+      return _.map(section.songLines, function(songLine, idxLine, songLines){
+        return {
+          section: idxSection,
+          line: idxLine,
+          startTime: getTotalSeconds(songLine.startTime)
+        };
+      });
+    });
+    return _.flatten(sectionTimings);
+  };
+
+  var play = function(){
+    player.audioPlayer('play');
+    interval = setInterval(triggerHighlight, 100);
+  };
+  var pause = function(){
+    player.audioPlayer('pause');
+    clearInterval(interval);
+  };
   var skipTo = function(idxSection, idxLine){};
   var setDelay = function(delay){};
 
   var init = function(givenSongStructure, givenPlayer){
     player = givenPlayer;
     songStructure = givenSongStructure;
+    display = this;
+    timing = createTiming(songStructure);
+    window.timing = timing;
+    currentTimeSlice = timing[0];
     return this;
   };
 

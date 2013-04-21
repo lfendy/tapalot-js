@@ -37,9 +37,7 @@
 
     var renderStartTime = function(songLine){
       var $timeDiv = $(document.createElement('div'));
-
       var timeText = " @" + songLine.startTime.minutes + ":" + (songLine.startTime.seconds.toFixed(2));
-
       $timeDiv
         .append(timeText)
         .addClass(SONGTIME);
@@ -51,7 +49,7 @@
       var $newDiv = $(document.createElement('div'));
       var $timeDiv = hasStartTime(songLine) ? renderStartTime(songLine) : null;
 
-      var text = songLine.lineText;
+      var text = songLine.repetition + "x " + songLine.lineText;
       $newDiv
         .append(text)
         .append($timeDiv)
