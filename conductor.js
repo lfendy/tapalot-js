@@ -7,8 +7,15 @@
   var timing;
 
   var createTiming = function(songStructure){
+    _.map(songStructure, function(section, idxSection){
+    });
     return {};
   };
+
+  var play = function(){};
+  var pause = function(){};
+  var skipTo = function(idxSection, idxLine){};
+  var setDelay = function(delay){};
 
   var init = function(givenSongStructure, givenPlayer){
     player = givenPlayer;
@@ -17,7 +24,11 @@
   };
 
   var methods = {
-    init: init
+    init: init,
+    play: play,
+    pause: pause,
+    skipTo: skipTo,
+    setDelay: setDelay
   };
 
   var methodInvoker = function(methodOrOptions) {

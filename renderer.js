@@ -2,9 +2,14 @@
 
   const PLAYING = "playing";
   const SONGLINE = "song_line";
+  const SONGTIME = "song_time";
 
   var getId = function(idxSection, idxLine){
     return "section_" + idxSection.toString() + "_line_" + idxLine.toString();
+  };
+
+  var hasStartTime = function(songLine){
+    return songLine.startTime != null && songLine.startTime.minutes != null;
   };
 
   var textRenderer = function(){
@@ -15,7 +20,7 @@
     var renderLine = function(id, songLine){
       var repetition = songLine.repetition;
       var text = songLine.lineText;
-      var startTime = songLine.startTime == null || songLine.startTime.minutes == null ? "" : " @" + songLine.startTime.minutes + ":" + songLine.startTime.seconds;
+      var startTime = hasStartTime(songLine) ? " @" + songLine.startTime.minutes + ":" + songLine.startTime.seconds : "";
       return repetition + "x " + text + startTime;
     };
 
@@ -30,11 +35,26 @@
       return null;
     };
 
+    var renderStartTime = function(songLine){
+      var $timeDiv = $(document.createElement('div'));
+
+      var timeText = " @" + songLine.startTime.minutes + ":" + (songLine.startTime.seconds.toFixed(2));
+
+      $timeDiv
+        .append(timeText)
+        .addClass(SONGTIME);
+
+      return $timeDiv;
+    };
+
     var renderLine = function(id, songLine){
       var $newDiv = $(document.createElement('div'));
-      var text = textRenderer().renderLine(id, songLine);
+      var $timeDiv = hasStartTime(songLine) ? renderStartTime(songLine) : null;
+
+      var text = songLine.lineText;
       $newDiv
         .append(text)
+        .append($timeDiv)
         .attr("id", id)
         .addClass(SONGLINE);
 
@@ -64,7 +84,8 @@
 
   var rerenderLine = function(element, songLine){
     var $element = $(element);
-    $element.text(textRenderer().renderLine(null,songLine));
+    var id = $element.attr("id");
+    $element.replaceWith(htmlRenderer().renderLine(id,songLine));
   };
 
   var renderText = function(givenSongStructure){

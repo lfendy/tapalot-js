@@ -58,6 +58,12 @@ a,
   font: 18pt 'Arial';
 }
 
+.song_time {
+  color: #bbb;
+  font: 12pt 'Arial';
+  float: right;
+}
+
 .playing {
   color: blue;
   font: 20pt bold 'Arial';

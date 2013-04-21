@@ -67,9 +67,10 @@
       };
 
       var rerenderLine = function(evt, songLine){
+        var $target = $(evt.target);
         $("#display").children().removeClass("pulse");
-        $(evt.target).addClass("pulse");
-        $("#display").renderer("rerenderLine", evt.target, songLine);
+        $("#display").renderer("rerenderLine", $target, songLine);
+        $("#" + $target.attr("id")).addClass("pulse");
       };
 
       var parseSong = function(){
