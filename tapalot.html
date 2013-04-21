@@ -7,6 +7,7 @@
     <script type="text/javascript" src="./dragdropper.js"></script>
     <script type="text/javascript" src="./renderer.js"></script>
     <script type="text/javascript" src="./composer.js"></script>
+    <script type="text/javascript" src="./conductor.js"></script>
     <link rel="stylesheet" type="text/css" media="screen" href="./tapalot_styles.css"/>
   </head>
   <body>
@@ -15,6 +16,8 @@
       HEARTBEAT
     </div>
     <input type="checkbox" id="composingModeCheckbox">Composing mode</input>
+    <a href="#" id="downloadSongStructure">Download Song Text</a>
+    <a href="#" id="hiddenDownloader" style="display: none;" download="song.txt">Not supposed to be shown</a>
     <div id="drop_zone">Drop Song, Grammar And Audio File Here</div>
     <div id="display"></div>
     <audio controls id="player"/>
@@ -27,6 +30,21 @@
       var parser = null;
       var rawSongStructure = null;
       var songStructure = null;
+
+      var handleDownloadSongClick = function(evt){
+        evt.preventDefault();
+        evt.stopImmediatePropagation();
+        var song = $("#display").renderer('renderText', songStructure);
+        var blob = new Blob([song], {type: "text/plain"}); //this is a memory leak
+
+        var downloader = $("#hiddenDownloader");
+        URL.revokeObjectURL(downloader.attr("href"));
+
+        var url = URL.createObjectURL(blob);
+        downloader.attr("href", url);
+
+        downloader[0].click(); //nasty hack to download file with name
+      };
 
       var changeToComposingMode = function(){
         $("#display").composer('enabled', true);
@@ -44,7 +62,9 @@
           }
       };
 
-      var highlightLine = function(evt, songLine){};
+      var highlightLine = function(evt, idxSection, idxLine){
+        $("#display").renderer("highlightLine", evt.target, idxSection, idxLine);
+      };
 
       var rerenderLine = function(evt, songLine){
         $("#display").children().removeClass("pulse");
@@ -94,6 +114,9 @@
 
       $("#composingModeCheckbox")
         .on("change", handleComposingModeChange);
+
+      $("#downloadSongStructure")
+        .on("click", handleDownloadSongClick);
 
      })(jQuery);
   </script>

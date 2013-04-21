@@ -92,7 +92,7 @@
     $("div." + SONGLINE).removeClass(PLAYING);
   };
 
-  var highlight = function(idxSection, idxLine){
+  var highlightLine = function(idxSection, idxLine){
     unhighlight();
     var id = getId(idxSection, idxLine);
     $("#" + id).addClass(PLAYING);
@@ -100,7 +100,7 @@
 
   var methods = {
     init: init,
-    highlight: highlight,
+    highlightLine: highlightLine,
     rerenderLine: rerenderLine,
     renderText: renderText
   };
