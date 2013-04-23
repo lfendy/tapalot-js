@@ -11,6 +11,84 @@
   // hack... States ?
   var currentTimeSlice;
 
+  var getPreviousTimeSlices = function(timing, timeSlice){
+    return _.filter(timing, function(ts){
+      return ts.section <= timeSlice.section && ts.line < timeSlice.line;
+    })
+  };
+
+  var getNextTimeSlices = function(timing, timeSlice){
+    return _.filter(timing, function(ts){
+      return ts.section >= timeSlice.section && ts.line > timeSlice.line;
+    })
+  };
+
+  var getFirstPreceedingSliceWithStartTime = function(timing, timeSlice){
+    var previousSlices = getPreviousTimeSlices(timing, timeSlice);
+    return _.last(_.filter(previousSlices, function(ts){
+      return !isNaN(ts.startTime);
+    }));
+  };
+
+  var getFirstSucceedingSliceWithStartTime = function(timing, timeSlice){
+    var nextSlices = getNextTimeSlices(timing, timeSlice);
+    return _.first(_.filter(nextSlices, function(ts){
+      return !isNaN(ts.startTime);
+    }));
+  };
+
+  var getSumOfPreviousRepetitions = function(timing, timeSlice){
+    var backSlice = getFirstPreceedingSliceWithStartTime(timing, timeSlice);
+    var allPreviousSlices = getPreviousTimeSlices(timing, timeSlice);
+    var inBetweenSlices = getNextTimeSlices(allPreviousSlices, backSlice).concat([backSlice]);
+    return _.reduce(inBetweenSlices, function(acc, ts){
+      return acc + ts.repetition;
+    }, 0);
+  };
+
+  var getSumOfNextRepetitions = function(timing, timeSlice){
+    var forwardSlice = getFirstSucceedingSliceWithStartTime(timing, timeSlice);
+    var allNextSlices = getNextTimeSlices(timing, timeSlice);
+    var inBetweenSlices = getPreviousTimeSlices(allNextSlices, forwardSlice);
+    inBetweenSlices = inBetweenSlices.concat([timeSlice]);
+    return _.reduce(inBetweenSlices, function(acc, ts){
+      return acc + ts.repetition;
+    }, 0);
+  };
+
+  var getMostRecentTempo = function(timing, timeSlice){
+    var prevSlice = getFirstPreceedingSliceWithStartTime(timing, timeSlice);
+    var prevprevSlice = getFirstPreceedingSliceWithStartTime(timing, prevSlice);
+    var delta = prevSlice.startTime - prevprevSlice.startTime;
+    return delta / prevprevSlice.repetition;
+  };
+
+  var fillStartTime = function(timing, timeSlice){
+    var previousTime = getFirstPreceedingSliceWithStartTime(timing, timeSlice).startTime;
+    var nextTimeSlice = getFirstSucceedingSliceWithStartTime(timing, timeSlice);
+    var prevReps = getSumOfPreviousRepetitions(timing, timeSlice);
+    if(nextTimeSlice != undefined){
+      var nextReps = getSumOfNextRepetitions(timing, timeSlice);
+      var nextTime = nextTimeSlice.startTime;
+      var delta = nextTime - previousTime;
+      var ratio = prevReps / (prevReps + nextReps);
+      timeSlice.startTime = previousTime + (ratio * delta);
+    } else {
+      var secondsPerBar = getMostRecentTempo(timing, timeSlice);
+      timeSlice.startTime = previousTime + (prevReps * secondsPerBar);
+    }
+  };
+
+  var fillAllStartTime = function(timing){
+    var emptySlices = _.filter(timing, function(ts){
+      return isNaN(ts.startTime);
+    });
+    _.each(emptySlices, function(ts){
+      fillStartTime(timing, ts);
+    });
+    return timing;
+  };
+
   var getTotalSeconds = function(startTime){
     return (parseInt(startTime.minutes) * 60) + parseFloat(startTime.seconds);
   };
@@ -30,23 +108,27 @@
         return {
           section: idxSection,
           line: idxLine,
-          startTime: getTotalSeconds(songLine.startTime)
+          startTime: getTotalSeconds(songLine.startTime),
+          repetition: songLine.repetition
         };
       });
     });
-    return _.flatten(sectionTimings);
+    var sparseTimings = _.flatten(sectionTimings);
+    return fillAllStartTime(sparseTimings);
   };
 
   var play = function(){
     player.audioPlayer('play');
     interval = setInterval(triggerHighlight, 100);
   };
+
   var pause = function(){
     player.audioPlayer('pause');
     clearInterval(interval);
   };
+
   var skipTo = function(idxSection, idxLine){};
-  var setDelay = function(delay){};
+  var setViewDelay = function(delay){};
 
   var init = function(givenSongStructure, givenPlayer){
     player = givenPlayer;
@@ -63,7 +145,7 @@
     play: play,
     pause: pause,
     skipTo: skipTo,
-    setDelay: setDelay
+    setViewDelay: setViewDelay
   };
 
   var methodInvoker = function(methodOrOptions) {

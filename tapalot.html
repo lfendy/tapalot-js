@@ -62,11 +62,16 @@
           }
       };
 
-      var highlightLine = function(evt, idxSection, idxLine){
+      var $heartbeat = $("#heartbeat");
+      var handleHeartbeat = function(evt, whatToShow){
+        $heartbeat.text(whatToShow);
+      }
+
+      var handleHighlightLine = function(evt, idxSection, idxLine){
         $("#display").renderer("highlightLine", idxSection, idxLine);
       };
 
-      var rerenderLine = function(evt, songLine){
+      var handleRerenderLine = function(evt, songLine){
         var $target = $(evt.target);
         $("#display").children().removeClass("pulse");
         $("#display").renderer("rerenderLine", $target, songLine);
@@ -79,9 +84,10 @@
           $("#display")
             .renderer(songStructure)
             .composer(songStructure, player)
-            .on("rerenderLine", rerenderLine)
+            .on("rerenderLine", handleRerenderLine)
             .conductor(songStructure, player)
-            .on("highlightLine", highlightLine);
+            .on("highlightLine", handleHighlightLine)
+            .on("heartbeat", handleHeartbeat);
           window.songStructure = songStructure;
         }
       };
