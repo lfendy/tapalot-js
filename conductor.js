@@ -6,7 +6,8 @@
   var player;
   var timing;
   var display;
-  var interval;
+  var highlightCheckInterval;
+  var heartbeatInterval;
 
   // hack... States ?
   var currentTimeSlice;
@@ -14,13 +15,13 @@
   var getPreviousTimeSlices = function(timing, timeSlice){
     return _.filter(timing, function(ts){
       return ts.section <= timeSlice.section && ts.line < timeSlice.line;
-    })
+    });
   };
 
   var getNextTimeSlices = function(timing, timeSlice){
     return _.filter(timing, function(ts){
       return ts.section >= timeSlice.section && ts.line > timeSlice.line;
-    })
+    });
   };
 
   var getFirstPreceedingSliceWithStartTime = function(timing, timeSlice){
@@ -93,11 +94,35 @@
     return (parseInt(startTime.minutes) * 60) + parseFloat(startTime.seconds);
   };
 
+  var heartbeat = "";
+  var triggerHeartbeat = function(){
+    if(heartbeat.length % 4 == 0) {
+      heartbeat = heartbeat + "X";
+    } else {
+      heartbeat = heartbeat + ".";
+    }
+    display.trigger('heartbeat', heartbeat);
+  };
+
+  var clearHeartbeat = function(){
+    heartbeat = "";
+    clearInterval(heartbeatInterval);
+  };
+
+  var startHeartbeat = function(duration){
+    triggerHeartbeat();
+    heartbeatInterval = setInterval(triggerHeartbeat, duration);
+  };
+
   var triggerHighlight = function(){
     var currentTime = getTotalSeconds(player.audioPlayer('getCurrentTime'));
       if(currentTimeSlice != undefined && currentTimeSlice.startTime <= currentTime){
+        clearHeartbeat();
         display.trigger('highlightLine', [currentTimeSlice.section, currentTimeSlice.line]);
         var idx = _.indexOf(timing, currentTimeSlice);
+        var delta = timing[idx+1].startTime - currentTimeSlice.startTime;
+        var heartbeatDuration = delta / (currentTimeSlice.repetition * 4);
+        startHeartbeat(heartbeatDuration * 1000);
         currentTimeSlice = timing[idx + 1];
       }
   };
@@ -119,12 +144,13 @@
 
   var play = function(){
     player.audioPlayer('play');
-    interval = setInterval(triggerHighlight, 100);
+    highlightCheckInterval = setInterval(triggerHighlight, 10);
   };
 
   var pause = function(){
     player.audioPlayer('pause');
-    clearInterval(interval);
+    clearInterval(highlightCheckInterval);
+    clearHeartbeat();
   };
 
   var skipTo = function(idxSection, idxLine){};

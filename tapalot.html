@@ -11,15 +11,14 @@
     <link rel="stylesheet" type="text/css" media="screen" href="./tapalot_styles.css"/>
   </head>
   <body>
-    <h1>Tapalot</h1>
-    <div id="heartbeat" >
+    <div id="heartbeat" class="heartbeat">
       HEARTBEAT
     </div>
     <input type="checkbox" id="composingModeCheckbox">Composing mode</input>
     <a href="#" id="downloadSongStructure">Download Song Text</a>
     <a href="#" id="hiddenDownloader" style="display: none;" download="song.txt">Not supposed to be shown</a>
+    <div id="display" class="scrollable"></div>
     <div id="drop_zone">Drop Song, Grammar And Audio File Here</div>
-    <div id="display"></div>
     <audio controls id="player"/>
   </body>
 
