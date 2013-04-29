@@ -125,6 +125,11 @@
       $("#downloadSongStructure")
         .on("click", handleDownloadSongClick);
 
+      $("#conductorPlay")
+        .on("click", function(){
+          $("#display").conductor("play");
+        });
+
      })(jQuery);
   </script>
 </html>
