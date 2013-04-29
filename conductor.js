@@ -4,7 +4,7 @@
 
   var songStructure;
   var player;
-  var timing;
+  var allTimeSlices;
   var display;
   var highlightCheckInterval;
   var heartbeatInterval;
@@ -12,44 +12,44 @@
   // hack... States ?
   var currentTimeSlice;
 
-  var getPreviousTimeSlices = function(timing, timeSlice){
-    return _.filter(timing, function(ts){
+  var getPreviousTimeSlices = function(allTimeSlices, timeSlice){
+    return _.filter(allTimeSlices, function(ts){
       return ts.section <= timeSlice.section && ts.line < timeSlice.line;
     });
   };
 
-  var getNextTimeSlices = function(timing, timeSlice){
-    return _.filter(timing, function(ts){
+  var getNextTimeSlices = function(allTimeSlices, timeSlice){
+    return _.filter(allTimeSlices, function(ts){
       return ts.section >= timeSlice.section && ts.line > timeSlice.line;
     });
   };
 
-  var getFirstPreceedingSliceWithStartTime = function(timing, timeSlice){
-    var previousSlices = getPreviousTimeSlices(timing, timeSlice);
+  var getFirstPreceedingSliceWithStartTime = function(allTimeSlices, timeSlice){
+    var previousSlices = getPreviousTimeSlices(allTimeSlices, timeSlice);
     return _.last(_.filter(previousSlices, function(ts){
       return !isNaN(ts.startTime);
     }));
   };
 
-  var getFirstSucceedingSliceWithStartTime = function(timing, timeSlice){
-    var nextSlices = getNextTimeSlices(timing, timeSlice);
+  var getFirstSucceedingSliceWithStartTime = function(allTimeSlices, timeSlice){
+    var nextSlices = getNextTimeSlices(allTimeSlices, timeSlice);
     return _.first(_.filter(nextSlices, function(ts){
       return !isNaN(ts.startTime);
     }));
   };
 
-  var getSumOfPreviousRepetitions = function(timing, timeSlice){
-    var backSlice = getFirstPreceedingSliceWithStartTime(timing, timeSlice);
-    var allPreviousSlices = getPreviousTimeSlices(timing, timeSlice);
+  var getSumOfPreviousRepetitions = function(allTimeSlices, timeSlice){
+    var backSlice = getFirstPreceedingSliceWithStartTime(allTimeSlices, timeSlice);
+    var allPreviousSlices = getPreviousTimeSlices(allTimeSlices, timeSlice);
     var inBetweenSlices = getNextTimeSlices(allPreviousSlices, backSlice).concat([backSlice]);
     return _.reduce(inBetweenSlices, function(acc, ts){
       return acc + ts.repetition;
     }, 0);
   };
 
-  var getSumOfNextRepetitions = function(timing, timeSlice){
-    var forwardSlice = getFirstSucceedingSliceWithStartTime(timing, timeSlice);
-    var allNextSlices = getNextTimeSlices(timing, timeSlice);
+  var getSumOfNextRepetitions = function(allTimeSlices, timeSlice){
+    var forwardSlice = getFirstSucceedingSliceWithStartTime(allTimeSlices, timeSlice);
+    var allNextSlices = getNextTimeSlices(allTimeSlices, timeSlice);
     var inBetweenSlices = getPreviousTimeSlices(allNextSlices, forwardSlice);
     inBetweenSlices = inBetweenSlices.concat([timeSlice]);
     return _.reduce(inBetweenSlices, function(acc, ts){
@@ -57,37 +57,37 @@
     }, 0);
   };
 
-  var getMostRecentTempo = function(timing, timeSlice){
-    var prevSlice = getFirstPreceedingSliceWithStartTime(timing, timeSlice);
-    var prevprevSlice = getFirstPreceedingSliceWithStartTime(timing, prevSlice);
+  var getMostRecentTempo = function(allTimeSlices, timeSlice){
+    var prevSlice = getFirstPreceedingSliceWithStartTime(allTimeSlices, timeSlice);
+    var prevprevSlice = getFirstPreceedingSliceWithStartTime(allTimeSlices, prevSlice);
     var delta = prevSlice.startTime - prevprevSlice.startTime;
     return delta / prevprevSlice.repetition;
   };
 
-  var fillStartTime = function(timing, timeSlice){
-    var previousTime = getFirstPreceedingSliceWithStartTime(timing, timeSlice).startTime;
-    var nextTimeSlice = getFirstSucceedingSliceWithStartTime(timing, timeSlice);
-    var prevReps = getSumOfPreviousRepetitions(timing, timeSlice);
+  var fillStartTime = function(allTimeSlices, timeSlice){
+    var previousTime = getFirstPreceedingSliceWithStartTime(allTimeSlices, timeSlice).startTime;
+    var nextTimeSlice = getFirstSucceedingSliceWithStartTime(allTimeSlices, timeSlice);
+    var prevReps = getSumOfPreviousRepetitions(allTimeSlices, timeSlice);
     if(nextTimeSlice != undefined){
-      var nextReps = getSumOfNextRepetitions(timing, timeSlice);
+      var nextReps = getSumOfNextRepetitions(allTimeSlices, timeSlice);
       var nextTime = nextTimeSlice.startTime;
       var delta = nextTime - previousTime;
       var ratio = prevReps / (prevReps + nextReps);
       timeSlice.startTime = previousTime + (ratio * delta);
     } else {
-      var secondsPerBar = getMostRecentTempo(timing, timeSlice);
+      var secondsPerBar = getMostRecentTempo(allTimeSlices, timeSlice);
       timeSlice.startTime = previousTime + (prevReps * secondsPerBar);
     }
   };
 
-  var fillAllStartTime = function(timing){
-    var emptySlices = _.filter(timing, function(ts){
+  var fillAllStartTime = function(allTimeSlices){
+    var emptySlices = _.filter(allTimeSlices, function(ts){
       return isNaN(ts.startTime);
     });
     _.each(emptySlices, function(ts){
-      fillStartTime(timing, ts);
+      fillStartTime(allTimeSlices, ts);
     });
-    return timing;
+    return allTimeSlices;
   };
 
   var getTotalSeconds = function(startTime){
@@ -95,13 +95,17 @@
   };
 
   var heartbeat = "";
-  var triggerHeartbeat = function(){
-    if(heartbeat.length % 4 == 0) {
-      heartbeat = heartbeat + "X";
-    } else {
-      heartbeat = heartbeat + ".";
-    }
-    display.trigger('heartbeat', heartbeat);
+  var triggerHeartbeat = function(numberOfBeats){
+    var trigger = function(){
+      var len = heartbeat.length;
+      if(len % numberOfBeats == 0) {
+        heartbeat = heartbeat + ((len / numberOfBeats) + 1);
+      } else {
+        heartbeat = heartbeat + ".";
+      }
+      display.trigger('heartbeat', heartbeat);
+    };
+    return trigger;
   };
 
   var clearHeartbeat = function(){
@@ -109,37 +113,42 @@
     clearInterval(heartbeatInterval);
   };
 
-  var startHeartbeat = function(duration){
-    triggerHeartbeat();
-    heartbeatInterval = setInterval(triggerHeartbeat, duration);
+  var startHeartbeat = function(duration, numberOfBeats){
+    var trigger = triggerHeartbeat(numberOfBeats);
+    trigger();
+    heartbeatInterval = setInterval(trigger, duration);
   };
 
   var triggerHighlight = function(){
     var currentTime = getTotalSeconds(player.audioPlayer('getCurrentTime'));
       if(currentTimeSlice != undefined && currentTimeSlice.startTime <= currentTime){
         clearHeartbeat();
+
+        var idx = _.indexOf(allTimeSlices, currentTimeSlice);
+        var delta = allTimeSlices[idx+1].startTime - currentTimeSlice.startTime;
+        var heartbeatDuration = delta / (currentTimeSlice.repetition * currentTimeSlice.numberOfBeats);
+        startHeartbeat(heartbeatDuration * 1000, currentTimeSlice.numberOfBeats);
+
         display.trigger('highlightLine', [currentTimeSlice.section, currentTimeSlice.line]);
-        var idx = _.indexOf(timing, currentTimeSlice);
-        var delta = timing[idx+1].startTime - currentTimeSlice.startTime;
-        var heartbeatDuration = delta / (currentTimeSlice.repetition * 4);
-        startHeartbeat(heartbeatDuration * 1000);
-        currentTimeSlice = timing[idx + 1];
+
+        currentTimeSlice = allTimeSlices[idx + 1];
       }
   };
 
-  var createTiming = function(songStructure){
-    var sectionTimings = _.map(songStructure, function(section, idxSection, sections){
+  var createTimeSlices = function(songStructure){
+    var sectionTimeSlices = _.map(songStructure, function(section, idxSection, sections){
       return _.map(section.songLines, function(songLine, idxLine, songLines){
         return {
           section: idxSection,
           line: idxLine,
           startTime: getTotalSeconds(songLine.startTime),
-          repetition: songLine.repetition
+          repetition: songLine.repetition,
+          numberOfBeats: section.timeSignature.beats
         };
       });
     });
-    var sparseTimings = _.flatten(sectionTimings);
-    return fillAllStartTime(sparseTimings);
+    var sparseTimeSlices = _.flatten(sectionTimeSlices);
+    return fillAllStartTime(sparseTimeSlices);
   };
 
   var play = function(){
@@ -160,9 +169,9 @@
     player = givenPlayer;
     songStructure = givenSongStructure;
     display = this;
-    timing = createTiming(songStructure);
-    window.timing = timing;
-    currentTimeSlice = timing[0];
+    allTimeSlices = createTimeSlices(songStructure);
+    window.allTimeSlices = allTimeSlices;
+    currentTimeSlice = allTimeSlices[0];
     return this;
   };
 
