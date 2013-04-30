@@ -26,15 +26,16 @@
     var songLine = songStructure[idx.section].songLines[idx.line];
     assignTime(songLine);
     $songLine.trigger("rerenderLine", songLine);
-    console.log(id);
   };
 
   var enable = function(){
     this.children().addClass(COMPOSABLE);
+    return this;
   };
 
   var disable = function(){
     this.children().removeClass(COMPOSABLE);
+    return this;
   };
 
   var init = function(givenSongStructure, givenPlayer){

@@ -50,11 +50,15 @@
       };
 
       var changeToComposingMode = function(){
-        $("#display").composer('enable');
+        $("#display")
+          .composer('enable')
+          .conductor('disable');
       };
 
       var changeToPlayingMode = function(){
-        $("#display").composer('disable');
+        $("#display")
+          .composer('disable')
+          .conductor('enable');
       };
 
       var handleComposingModeChange = function(evt){

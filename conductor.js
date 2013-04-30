@@ -177,6 +177,30 @@
   };
   var setViewDelay = function(delay){};
 
+  var enable = function(){
+    display.children().addClass(PLAYABLE);
+    return this;
+  };
+
+  var disable = function(){
+    display.children().removeClass(PLAYABLE);
+    return this;
+  };
+
+  var idxFromIdGrammar = 'indexes = "section_" section:[0-9]+ "_line_" line:[0-9]+ {return { section: parseInt(section.join("")), line: parseInt(line.join("")) };}';
+  var idxFromIdParser = PEG.buildParser(idxFromIdGrammar);
+
+  var getIdxFromId = function(id){
+    return idxFromIdParser.parse(id);
+  };
+
+  var handleClickSongLine = function(evt){
+    var $songLine = $(evt.target);
+    var id = $songLine.attr("id");
+    var idx = getIdxFromId(id);
+    skipTo(idx.section, idx.line);
+  };
+
   var init = function(givenSongStructure, givenPlayer, givenViewDelay){
     viewDelay = givenViewDelay;
     player = givenPlayer;
@@ -185,6 +209,7 @@
     allTimeSlices = createTimeSlices(songStructure);
     window.tapalotDebug.allTimeSlices = allTimeSlices;
     currentTimeSlice = allTimeSlices[0];
+    display.on("click", "." + PLAYABLE, handleClickSongLine);
     return this;
   };
 
@@ -193,6 +218,8 @@
     play: play,
     pause: pause,
     skipTo: skipTo,
+    enable: enable,
+    disable: disable,
     setViewDelay: setViewDelay
   };
 
