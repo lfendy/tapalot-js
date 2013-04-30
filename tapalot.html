@@ -93,6 +93,7 @@
             .composer(songStructure, player)
             .on("rerenderLine", handleRerenderLine)
             .conductor(songStructure, player, (-1 * ANIMATION_DELAY))
+            .conductor("enable")
             .on("highlightLine", handleHighlightLine)
             .on("heartbeat", handleHeartbeat);
           window.tapalotDebug.songStructure = songStructure;
