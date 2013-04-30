@@ -18,6 +18,7 @@
     <a href="#" id="downloadSongStructure">Download Song Text</a>
     <a href="#" id="hiddenDownloader" style="display: none;" download="song.txt">Not supposed to be shown</a>
     <input type="button" id="play" value="play"/>
+    <input type="button" id="pause" value="pause"/>
     <div id="display" class="scrollable"></div>
     <div id="drop_zone">Drop Song, Grammar And Audio File Here</div>
     <audio controls id="player"/>
@@ -129,9 +130,18 @@
       $("#play")
         .on("click", function(){
             if($("#composingModeCheckbox").is(":checked")){
-              $("#display").conductor("play");
-            } else {
               $("#player").audioPlayer("play");
+            } else {
+              $("#display").conductor("play");
+            }
+        });
+
+      $("#pause")
+        .on("click", function(){
+            if($("#composingModeCheckbox").is(":checked")){
+              $("#player").audioPlayer("pause");
+            } else {
+              $("#display").conductor("pause");
             }
         });
 

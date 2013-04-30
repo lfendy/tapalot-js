@@ -5,6 +5,7 @@
   var songStructure;
   var player;
   var viewDelay;
+  var hierarchicalTimeSlices;
   var allTimeSlices;
   var display;
   var checkTriggersInterval;
@@ -152,7 +153,8 @@
         };
       });
     });
-    var sparseTimeSlices = _.flatten(sectionTimeSlices);
+    hierarchicalTimeSlices = sectionTimeSlices;
+    var sparseTimeSlices = _.flatten(hierarchicalTimeSlices);
     return fillAllStartTime(sparseTimeSlices);
   };
 
@@ -167,7 +169,10 @@
     clearHeartbeat();
   };
 
-  var skipTo = function(idxSection, idxLine){};
+  var skipTo = function(idxSection, idxLine){
+    var slice = hierarchicalTimeSlices[idxSection][idxLine];
+    player.audioPlayer('setCurrentTime', slice.startTime);
+  };
   var setViewDelay = function(delay){};
 
   var init = function(givenSongStructure, givenPlayer, givenViewDelay){
