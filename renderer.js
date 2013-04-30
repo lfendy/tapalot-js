@@ -12,6 +12,11 @@
     return songLine.startTime != null && songLine.startTime.minutes != null;
   };
 
+
+
+
+
+
   var textRenderer = function(){
     var renderTimeSignature = function(timeSignature){
       return timeSignature.beats + "/" + timeSignature.noteValue;
@@ -29,6 +34,11 @@
       renderTimeSignature: renderTimeSignature
     };
   };
+
+
+
+
+
 
   var htmlRenderer = function(){
     var renderTimeSignature = function(timeSignature){
@@ -67,28 +77,53 @@
 
 
 
+
+
+
+
+  var renderLine = function(idxSection, renderer){
+    return function(line, idx){
+      return renderer.renderLine(getId(idxSection, idx), line);
+    };
+  };
+
   var renderLines = function(songLines, idxSection, renderer){
-    return _.map(songLines, function(songLine, idxLine){
-      return renderer.renderLine(getId(idxSection, idxLine), songLine);
-    });
+    return _.map(songLines, renderLine(idxSection, renderer));
+  };
+
+  var renderSection = function(renderer){
+    return function(section, idx){
+      var ts = renderer.renderTimeSignature(section.timeSignature);
+      return [ts].concat(renderLines(section.songLines, idx, renderer));
+    };
   };
 
   var renderSections = function(songStructure, renderer){
-    return _.flatten(_.map(songStructure, function(songSection, idxSection){
-      var ts = renderer.renderTimeSignature(songSection.timeSignature);
-      return [ts].concat(renderLines(songSection.songLines, idxSection, renderer));
-    }));
+    return _.flatten(_.map(songStructure, renderSection(renderer)));
   };
+
+
+
+
+
 
   var rerenderLine = function(element, songLine){
     var $element = $(element);
+    var classes = $element[0].classList;
     var id = $element.attr("id");
-    $element.replaceWith(htmlRenderer().renderLine(id,songLine));
+    $element.replaceWith(htmlRenderer().renderLine(id, songLine));
+    $element = $("#" + id);
+    _.each(classes, function(name){ $element.addClass(name) });
   };
 
   var renderText = function(givenSongStructure){
     return renderSections(givenSongStructure, textRenderer()).join("\n");;
   };
+
+
+
+
+
 
   var init = function(givenSongStructure){
     var $this = $(this);
@@ -116,7 +151,7 @@
     var id = getId(idxSection, idxLine);
     var toHighlight = $("#" + id);
     var display = this;
-    var magicPixelNumber = -20;
+    var magicPixelNumber = -80;
     this.animate({scrollTop: toHighlight.offset().top + magicPixelNumber - this.offset().top + this.scrollTop()})
     toHighlight.addClass(PLAYING);
   };

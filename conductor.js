@@ -7,8 +7,9 @@
   var viewDelay;
   var allTimeSlices;
   var display;
-  var highlightCheckInterval;
+  var checkTriggersInterval;
   var heartbeatInterval;
+  const CHECK_TRIGGERS_DURATION_MS = 10
 
   // hack... States ?
   var currentTimeSlice;
@@ -128,7 +129,6 @@
         var nextSlice = allTimeSlices[idx+1];
         var delta = nextSlice.startTime - currentTimeSlice.startTime;
         var heartbeatDuration = delta / (currentTimeSlice.repetition * currentTimeSlice.numberOfBeats);
-        console.log(viewDelay);
         setTimeout(function(){
           clearHeartbeat();
           startHeartbeat(heartbeatDuration * 1000, currentTimeSlice.numberOfBeats);
@@ -158,12 +158,12 @@
 
   var play = function(){
     player.audioPlayer('play');
-    highlightCheckInterval = setInterval(checkTriggers, 10);
+    checkTriggersInterval = setInterval(checkTriggers, CHECK_TRIGGERS_DURATION_MS);
   };
 
   var pause = function(){
     player.audioPlayer('pause');
-    clearInterval(highlightCheckInterval);
+    clearInterval(checkTriggersInterval);
     clearHeartbeat();
   };
 
