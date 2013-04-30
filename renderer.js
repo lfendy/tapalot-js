@@ -114,7 +114,11 @@
   var highlightLine = function(idxSection, idxLine){
     unhighlight();
     var id = getId(idxSection, idxLine);
-    $("#" + id).addClass(PLAYING);
+    var toHighlight = $("#" + id);
+    var display = this;
+    var magicPixelNumber = -20;
+    this.animate({scrollTop: toHighlight.offset().top + magicPixelNumber - this.offset().top + this.scrollTop()})
+    toHighlight.addClass(PLAYING);
   };
 
   var methods = {

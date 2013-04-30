@@ -30,6 +30,7 @@
       var parser = null;
       var rawSongStructure = null;
       var songStructure = null;
+      const ANIMATION_DELAY = 0.7;
 
       var handleDownloadSongClick = function(evt){
         evt.preventDefault();
@@ -85,7 +86,7 @@
             .renderer(songStructure)
             .composer(songStructure, player)
             .on("rerenderLine", handleRerenderLine)
-            .conductor(songStructure, player)
+            .conductor(songStructure, player, (-1 * ANIMATION_DELAY))
             .on("highlightLine", handleHighlightLine)
             .on("heartbeat", handleHeartbeat);
           window.songStructure = songStructure;

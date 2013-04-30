@@ -4,6 +4,7 @@
 
   var songStructure;
   var player;
+  var viewDelay;
   var allTimeSlices;
   var display;
   var highlightCheckInterval;
@@ -119,19 +120,23 @@
     heartbeatInterval = setInterval(trigger, duration);
   };
 
-  var triggerHighlight = function(){
+  var checkTriggers = function(){
     var currentTime = getTotalSeconds(player.audioPlayer('getCurrentTime'));
-      if(currentTimeSlice != undefined && currentTimeSlice.startTime <= currentTime){
-        clearHeartbeat();
+      if(currentTimeSlice != undefined && (currentTimeSlice.startTime + viewDelay) <= currentTime){
 
         var idx = _.indexOf(allTimeSlices, currentTimeSlice);
-        var delta = allTimeSlices[idx+1].startTime - currentTimeSlice.startTime;
+        var nextSlice = allTimeSlices[idx+1];
+        var delta = nextSlice.startTime - currentTimeSlice.startTime;
         var heartbeatDuration = delta / (currentTimeSlice.repetition * currentTimeSlice.numberOfBeats);
-        startHeartbeat(heartbeatDuration * 1000, currentTimeSlice.numberOfBeats);
+        console.log(viewDelay);
+        setTimeout(function(){
+          clearHeartbeat();
+          startHeartbeat(heartbeatDuration * 1000, currentTimeSlice.numberOfBeats);
+        }, (-1 * viewDelay) * 1000);
 
         display.trigger('highlightLine', [currentTimeSlice.section, currentTimeSlice.line]);
 
-        currentTimeSlice = allTimeSlices[idx + 1];
+        currentTimeSlice = nextSlice;
       }
   };
 
@@ -153,7 +158,7 @@
 
   var play = function(){
     player.audioPlayer('play');
-    highlightCheckInterval = setInterval(triggerHighlight, 10);
+    highlightCheckInterval = setInterval(checkTriggers, 10);
   };
 
   var pause = function(){
@@ -165,7 +170,8 @@
   var skipTo = function(idxSection, idxLine){};
   var setViewDelay = function(delay){};
 
-  var init = function(givenSongStructure, givenPlayer){
+  var init = function(givenSongStructure, givenPlayer, givenViewDelay){
+    viewDelay = givenViewDelay;
     player = givenPlayer;
     songStructure = givenSongStructure;
     display = this;
