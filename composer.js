@@ -29,12 +29,12 @@
     console.log(id);
   };
 
-  var enabled = function(isEnabled){
-    if(isEnabled){
-      this.children().addClass(COMPOSABLE);
-    } else {
-      this.children().removeClass(COMPOSABLE);
-    }
+  var enable = function(){
+    this.children().addClass(COMPOSABLE);
+  };
+
+  var disable = function(){
+    this.children().removeClass(COMPOSABLE);
   };
 
   var init = function(givenSongStructure, givenPlayer){
@@ -47,7 +47,8 @@
 
   var methods = {
     init: init,
-    enabled: enabled
+    enable: enable,
+    disable: disable
   };
 
 

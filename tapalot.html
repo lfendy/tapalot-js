@@ -25,6 +25,7 @@
   </body>
 
   <script type="text/javascript">
+    window.tapalotDebug = {};
     (function($){
       var player = $("#player").audioPlayer();
 
@@ -49,11 +50,11 @@
       };
 
       var changeToComposingMode = function(){
-        $("#display").composer('enabled', true);
+        $("#display").composer('enable');
       };
 
       var changeToPlayingMode = function(){
-        $("#display").composer('enabled', false);
+        $("#display").composer('disable');
       };
 
       var handleComposingModeChange = function(evt){
@@ -90,7 +91,7 @@
             .conductor(songStructure, player, (-1 * ANIMATION_DELAY))
             .on("highlightLine", handleHighlightLine)
             .on("heartbeat", handleHeartbeat);
-          window.songStructure = songStructure;
+          window.tapalotDebug.songStructure = songStructure;
         }
       };
 
@@ -104,15 +105,15 @@
         var grammar = data.contents;
         parser = PEG.buildParser(grammar);
         parseSong();
-        window.grammar = grammar;
-        window.parser = parser;
+        window.tapalotDebug.grammar = grammar;
+        window.tapalotDebug.parser = parser;
       };
 
       var handleReceivedSongStructure = function(evt, data){
         console.log("received song structure");
         rawSongStructure = data.contents;
         parseSong();
-        window.rawSongStructure = rawSongStructure;
+        window.tapalotDebug.rawSongStructure = rawSongStructure;
       };
 
       $("#drop_zone")

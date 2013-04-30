@@ -171,7 +171,9 @@
 
   var skipTo = function(idxSection, idxLine){
     var slice = hierarchicalTimeSlices[idxSection][idxLine];
-    player.audioPlayer('setCurrentTime', slice.startTime);
+    player.audioPlayer('setCurrentTime', slice.startTime + viewDelay);
+    currentTimeSlice = slice;
+    clearHeartbeat();
   };
   var setViewDelay = function(delay){};
 
@@ -181,7 +183,7 @@
     songStructure = givenSongStructure;
     display = this;
     allTimeSlices = createTimeSlices(songStructure);
-    window.allTimeSlices = allTimeSlices;
+    window.tapalotDebug.allTimeSlices = allTimeSlices;
     currentTimeSlice = allTimeSlices[0];
     return this;
   };
