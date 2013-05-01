@@ -21,8 +21,8 @@
     <a href="#" id="hiddenDownloader" style="display: none;" download="song.txt">Not supposed to be shown</a>
     <input type="button" id="play" value="play"/>
     <input type="button" id="pause" value="pause"/>
-    <div id="display" class="scrollable"></div>
-    <div id="drop_zone">Drop Song, Grammar And Audio File Here</div>
+    <div id="display" class="scrollable dragdropper"></div>
+    <!--<div id="drop_zone" class="dragdropper">Drop Song, Grammar And Audio File Here</div> -->
     <audio controls id="player"/>
   </body>
 
@@ -123,7 +123,7 @@
         window.tapalotDebug.rawSongStructure = rawSongStructure;
       };
 
-      $("#drop_zone")
+      $(".dragdropper")
         .dragdropper()
         .on("receivedMP3", handleReceivedAudio)
         .on("receivedPEG", handleReceivedGrammar)
