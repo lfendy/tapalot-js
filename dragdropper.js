@@ -16,41 +16,54 @@
       $this.trigger("receivedPEG", data);
     };
 
+    var processTXT = function(f){
+      var fr = new FileReader();
+      fr.onload = handleFinishReadingTXT;
+      fr.readAsText(f);
+    };
+
+    var processPEG = function(f){
+      var fr = new FileReader();
+      fr.onload = handleFinishReadingPEG;
+      fr.readAsText(f);
+    };
+
+    var processMP3 = function(f){
+      var url = URL.createObjectURL(f);
+      var data = {url: url}
+      $this.trigger("receivedMP3", data);
+    };
+
+    var processFile = function(f){
+      switch(getFileExtension(f.name)){
+        case "mp3":
+          processMP3(f);
+          break;
+        case "peg":
+          processPEG(f);
+          break;
+        case "txt":
+          processTXT(f);
+          break;
+      }
+    };
+
     var handleDragOver = function(evt){
       evt.stopPropagation();
       evt.preventDefault();
       evt.originalEvent.dataTransfer.dropEffect = 'copy';
     };
 
-    var handleFileSelect = function(evt){
+    var handleDrop = function(evt){
       evt.stopPropagation();
       evt.preventDefault();
 
       var files = evt.originalEvent.dataTransfer.files;
-      for (var i = 0, f; f = files[i]; i++){
-        switch(getFileExtension(f.name)){
-          case "mp3":
-            var url = URL.createObjectURL(f);
-            var data = {url: url}
-            $this.trigger("receivedMP3", data);
-            break;
-          case "peg":
-            var fr = new FileReader();
-            fr.onload = handleFinishReadingPEG;
-            fr.readAsText(f);
-            break;
-          case "txt":
-            var fr = new FileReader();
-            fr.onload = handleFinishReadingTXT;
-            fr.readAsText(f);
-            break;
-        }
-      }
-
+      _.each(files, processFile);
     };
 
     $this.on('dragover', handleDragOver);
-    $this.on('drop', handleFileSelect);
+    $this.on('drop', handleDrop);
 
     return $this;
   };
