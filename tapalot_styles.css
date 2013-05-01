@@ -13,10 +13,10 @@
 
 
 .heartbeat {
-  display:block;
-  position:relative;
-  font: 16pt 'Courier New';
+  font:        16pt 'Courier New';
   font-weight: bold;
+  position:    relative;
+  display:     block;
 }
 a,
 .heartbeat.inline {
@@ -24,14 +24,14 @@ a,
 }
 
 #drop_zone {
-  border: 2px dashed #bbb;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
-  padding: 25px;
+  border:     2px dashed #bbb;
+  padding:    25px;
   text-align: center;
-  font: 20pt bold 'Vollkorn';
-  color: #bbb;
+  font:       20pt bold 'Vollkorn';
+  color:      #bbb;
+  border-radius:         5px;
+  -moz-border-radius:    5px;
+  -webkit-border-radius: 5px;
 }
 
 .song_line {
@@ -44,18 +44,18 @@ a,
 
 .song_time {
   color: #bbb;
-  font: 12pt 'Arial';
+  font:  12pt 'Arial';
   float: right;
 }
 
 .playing {
   color: blue;
-  font: 36pt bold 'Arial';
+  font:  36pt bold 'Arial';
 }
 
 .scrollable {
-  width: 100%;
-  height: 500px;
+  width:    100%;
+  height:   500px;
   overflow: scroll;
 }
 

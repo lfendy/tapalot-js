@@ -8,22 +8,27 @@
 
   var setSongSource = function(source){
     player.src = source;
+    return this;
   }
 
   var play = function(){
     player.play();
+    return this;
   };
 
   var pause = function(){
     player.pause();
+    return this;
   };
 
   var rewind = function(){
     player.currentTime = 0;
+    return this;
   };
 
   var setCurrentTime = function(songLocation){
     player.currentTime = songLocation;
+    return this;
   };
 
   var getCurrentTime = function(){
@@ -43,29 +48,5 @@
     setSongSource: setSongSource
   };
 
-  var methodInvoker = function(methodOrOptions) {
-    if ( methods[methodOrOptions] ) {
-      return methods[ methodOrOptions ].apply( this, Array.prototype.slice.call( arguments, 1 ));
-    } else if ( typeof methodOrOptions === 'object' || ! methodOrOptions ) {
-      return methods.init.apply( this, arguments );
-    } else {
-      $.error( 'Method ' +  method + ' does not exist' );
-    }
-  };
-
-  $.fn.audioPlayer = methodInvoker;
+  $.fn.audioPlayer = $.tapalot.createPlugin(methods);
 })(jQuery);
-
-
-/*
-var tapalot = $("#player").tapalot();
-tapalot.parse(string);
-tapalot.play();
-tapalot.pause();
-tapalot.rewind();
-tapalot.seek(number);
-tapalot.viewDelay();
-
-var composer = $("#some_div").tapalotComposer();
-*/
-// when onClick -- will then need to know the time of song when it was clicked

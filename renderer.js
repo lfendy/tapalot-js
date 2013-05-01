@@ -114,6 +114,7 @@
     $element.replaceWith(htmlRenderer().renderLine(id, songLine));
     $element = $("#" + id);
     _.each(classes, function(name){ $element.addClass(name) });
+    return this;
   };
 
   var renderText = function(givenSongStructure){
@@ -126,7 +127,7 @@
 
 
   var init = function(givenSongStructure){
-    var $this = $(this);
+    var $this = this;
 
     var clear = function(){
       $this.children().remove();
@@ -154,6 +155,7 @@
     var magicPixelNumber = -80;
     this.animate({scrollTop: toHighlight.offset().top + magicPixelNumber - this.offset().top + this.scrollTop()})
     toHighlight.addClass(PLAYING);
+    return this;
   };
 
   var methods = {
@@ -163,16 +165,5 @@
     renderText: renderText
   };
 
-
-  var methodInvoker = function(methodOrOptions) {
-    if ( methods[methodOrOptions] ) {
-      return methods[ methodOrOptions ].apply( this, Array.prototype.slice.call( arguments, 1 ));
-    } else if ( typeof methodOrOptions === 'object' || ! methodOrOptions ) {
-      return methods.init.apply( this, arguments );
-    } else {
-      $.error( 'Method ' +  method + ' does not exist' );
-    }
-  };
-
-  $.fn.renderer = methodInvoker;
+  $.fn.renderer = $.tapalot.createPlugin(methods);
 })(jQuery);
