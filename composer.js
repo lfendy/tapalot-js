@@ -1,14 +1,8 @@
 (function($){
   const COMPOSABLE = "composable";
 
-  var idxFromIdGrammar = 'indexes = "section_" section:[0-9]+ "_line_" line:[0-9]+ {return { section: parseInt(section.join("")), line: parseInt(line.join("")) };}';
-  var idxFromIdParser = PEG.buildParser(idxFromIdGrammar);
   var songStructure;
   var player;
-
-  var getIdxFromId = function(id){
-    return idxFromIdParser.parse(id);
-  };
 
   var getSongTime = function(){
     return player.audioPlayer('getCurrentTime');
@@ -16,14 +10,13 @@
 
   var assignTime = function(songLine){
     songLine.startTime = getSongTime();
-    console.dir(songLine);
   };
 
   var handleClickSongLine = function(evt){
     var $songLine = $(evt.target);
-    var id = $songLine.attr("id");
-    var idx = getIdxFromId(id);
-    var songLine = songStructure[idx.section].songLines[idx.line];
+    var idxSection = $songLine.attr("idxSection");
+    var idxLine = $songLine.attr("idxLine");
+    var songLine = songStructure[idxSection].songLines[idxLine];
     assignTime(songLine);
     $songLine.trigger("rerenderLine", songLine);
   };

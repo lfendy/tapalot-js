@@ -4,7 +4,7 @@
   const SONGLINE = "song_line";
   const SONGTIME = "song_time";
 
-  var getId = function(idxSection, idxLine){
+  var constructId = function(idxSection, idxLine){
     return "section_" + idxSection.toString() + "_line_" + idxLine.toString();
   };
 
@@ -22,7 +22,7 @@
       return timeSignature.beats + "/" + timeSignature.noteValue;
     };
 
-    var renderLine = function(id, songLine){
+    var renderLine = function(songLine){
       var repetition = songLine.repetition;
       var text = songLine.lineText;
       var startTime = hasStartTime(songLine) ? " @" + songLine.startTime.minutes + ":" + songLine.startTime.seconds : "";
@@ -55,7 +55,8 @@
       return $timeDiv;
     };
 
-    var renderLine = function(id, songLine){
+    var renderLine = function(songLine, idxSection, idxLine){
+      var id = constructId(idxSection, idxLine);
       var $newDiv = $(document.createElement('div'));
       var $timeDiv = hasStartTime(songLine) ? renderStartTime(songLine) : null;
 
@@ -64,6 +65,8 @@
         .append(text)
         .append($timeDiv)
         .attr("id", id)
+        .attr("idxSection", idxSection)
+        .attr("idxLine", idxLine)
         .addClass(SONGLINE);
 
       return $newDiv;
@@ -83,7 +86,7 @@
 
   var renderLine = function(idxSection, renderer){
     return function(line, idx){
-      return renderer.renderLine(getId(idxSection, idx), line);
+      return renderer.renderLine(line, idxSection, idx);
     };
   };
 
@@ -111,7 +114,9 @@
     var $element = $(element);
     var classes = $element[0].classList;
     var id = $element.attr("id");
-    $element.replaceWith(htmlRenderer().renderLine(id, songLine));
+    var idxSection = $element.attr("idxSection");
+    var idxLine = $element.attr("idxLine");
+    $element.replaceWith(htmlRenderer().renderLine(songLine, idxSection, idxLine));
     $element = $("#" + id);
     _.each(classes, function(name){ $element.addClass(name) });
     return this;
@@ -149,7 +154,7 @@
 
   var highlightLine = function(idxSection, idxLine){
     unhighlight();
-    var id = getId(idxSection, idxLine);
+    var id = constructId(idxSection, idxLine);
     var toHighlight = $("#" + id);
     var display = this;
     var magicPixelNumber = -80;
