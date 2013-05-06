@@ -164,6 +164,11 @@
           handleReceivedGrammar(null, {contents: data});
         });
       });
+
+      //TODO: refactor totalSeconds -- introduce a time class that can produce different formats
+      //TODO: introduce endTime to timeSlices -- so only need to track one timeSlice (for checking time and displaying heartbeat. also less confusing because 'current' is misleading"
+
+
      })(jQuery);
   </script>
 </html>

@@ -12,25 +12,36 @@
   const CHECK_TRIGGERS_DURATION_MS = 10
 
   // hack... States ?
-  var currentTimeSlice;
+  var currentTimeSliceBeingChecked;
 
 
-  var heartbeat = "";
+  var heartbeat = {
+    progressForRepetition: 0,
+    display: "",
+    beats: 0
+  };
   var triggerHeartbeat = function(numberOfBeats){
     var trigger = function(){
-      var len = heartbeat.length;
-      if(len % numberOfBeats == 0) {
-        heartbeat = heartbeat + ((len / numberOfBeats) + 1);
+      var idx = _.indexOf(timeSlices.flat, currentTimeSliceBeingChecked);
+      var currentSlice = timeSlices.flat[idx-1];
+      if(heartbeat.beats % numberOfBeats == 0) {
+        heartbeat.progressForRepetition += 1;
+        heartbeat.display = "(" + heartbeat.progressForRepetition + "/" + currentSlice.repetition + ")";
       } else {
-        heartbeat = heartbeat + ".";
+        heartbeat.display = heartbeat.display + ".";
       }
-      display.trigger('heartbeat', heartbeat);
+      heartbeat.beats += 1;
+      display.trigger('heartbeat', heartbeat.display);
     };
     return trigger;
   };
 
   var clearHeartbeat = function(){
-    heartbeat = "";
+    heartbeat = {
+      progressForRepetition: 0,
+      display: "",
+      beats: 0
+    };
     clearInterval(heartbeatInterval);
   };
 
@@ -42,20 +53,20 @@
 
   var checkTriggers = function(){
     var currentTime = $.tapalot.timeSlice.getTotalSeconds(player.audioPlayer('getCurrentTime'));
-    if(currentTimeSlice != undefined && (currentTimeSlice.startTime + viewDelay) <= currentTime){
+    if(currentTimeSliceBeingChecked != undefined && (currentTimeSliceBeingChecked.startTime + viewDelay) <= currentTime){
 
-      var idx = _.indexOf(timeSlices.flat, currentTimeSlice);
+      var idx = _.indexOf(timeSlices.flat, currentTimeSliceBeingChecked);
       var nextSlice = timeSlices.flat[idx+1];
-      var delta = nextSlice.startTime - currentTimeSlice.startTime;
-      var heartbeatDuration = delta / (currentTimeSlice.repetition * currentTimeSlice.numberOfBeats);
+      var delta = nextSlice.startTime - currentTimeSliceBeingChecked.startTime;
+      var heartbeatDuration = delta / (currentTimeSliceBeingChecked.repetition * currentTimeSliceBeingChecked.numberOfBeats);
       setTimeout(function(){
         clearHeartbeat();
-        startHeartbeat(heartbeatDuration * 1000, currentTimeSlice.numberOfBeats);
+        startHeartbeat(heartbeatDuration * 1000, currentTimeSliceBeingChecked.numberOfBeats);
       }, (-1 * viewDelay) * 1000);
 
-      display.trigger('highlightLine', [currentTimeSlice.section, currentTimeSlice.line]);
+      display.trigger('highlightLine', [currentTimeSliceBeingChecked.section, currentTimeSliceBeingChecked.line]);
 
-      currentTimeSlice = nextSlice;
+      currentTimeSliceBeingChecked = nextSlice;
     }
   };
 
@@ -73,7 +84,7 @@
   var skipTo = function(idxSection, idxLine){
     var slice = timeSlices.hierarchical[idxSection][idxLine];
     player.audioPlayer('setCurrentTime', slice.startTime + viewDelay);
-    currentTimeSlice = slice;
+    currentTimeSliceBeingChecked = slice;
     clearHeartbeat();
   };
   var setViewDelay = function(delay){};
@@ -102,7 +113,7 @@
     display = this;
     timeSlices = $.tapalot.timeSlice.createTimeSlices(songStructure);
     window.tapalotDebug.timeSlices = timeSlices;
-    currentTimeSlice = timeSlices.flat[0];
+    currentTimeSliceBeingChecked = timeSlices.flat[0];
     display.on("click", "." + PLAYABLE, handleClickSongLine);
     return this;
   };
