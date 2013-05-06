@@ -28,7 +28,7 @@
       fr.readAsText(f);
     };
 
-    var processMP3 = function(f){
+    var processAudio = function(f){
       var url = URL.createObjectURL(f);
       var data = {url: url}
       $this.trigger("receivedMP3", data);
@@ -36,8 +36,9 @@
 
     var processFile = function(f){
       switch(getFileExtension(f.name)){
+        case "m4a":
         case "mp3":
-          processMP3(f);
+          processAudio(f);
           break;
         case "peg":
           processPEG(f);
