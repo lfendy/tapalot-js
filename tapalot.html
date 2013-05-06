@@ -1,26 +1,31 @@
 <!DOCTYPE html>
   <head>
-    <script type="text/javascript" src="./underscore-min.js"></script>
-    <script type="text/javascript" src="./jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="./peg-0.7.0.min.js"></script>
-    <script type="text/javascript" src="./time_slice.js"></script>
-    <script type="text/javascript" src="./create_plugin.js"></script>
-    <script type="text/javascript" src="./audio_player.js"></script>
-    <script type="text/javascript" src="./dragdropper.js"></script>
-    <script type="text/javascript" src="./renderer.js"></script>
-    <script type="text/javascript" src="./composer.js"></script>
-    <script type="text/javascript" src="./conductor.js"></script>
-    <link rel="stylesheet" type="text/css" media="screen" href="./tapalot_styles.css"/>
+    <script type="text/javascript" src="./js/external/underscore-min.js"></script>
+    <script type="text/javascript" src="./js/external/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="./js/external/peg-0.7.0.min.js"></script>
+    <script type="text/javascript" src="./js/external/bootstrap.js"></script>
+    <script type="text/javascript" src="./js/time_slice.js"></script>
+    <script type="text/javascript" src="./js/create_plugin.js"></script>
+    <script type="text/javascript" src="./js/audio_player.js"></script>
+    <script type="text/javascript" src="./js/dragdropper.js"></script>
+    <script type="text/javascript" src="./js/renderer.js"></script>
+    <script type="text/javascript" src="./js/composer.js"></script>
+    <script type="text/javascript" src="./js/conductor.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="./css/external/bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" media="screen" href="./css/tapalot.css"/>
   </head>
   <body>
     <div id="heartbeat" class="heartbeat">
       X
     </div>
-    <input type="checkbox" id="composingModeCheckbox">Composing mode</input>
-    <a href="#" id="downloadSongStructure">Download Song Text</a>
+
+    <label class="checkbox">
+      <input type="checkbox" id="composingModeCheckbox">Composing mode</input>
+    </label>
+    <a href="#" id="downloadSongStructure" class="btn btn-primary">Download Song Text</a>
     <a href="#" id="hiddenDownloader" style="display: none;" download="song.txt">Not supposed to be shown</a>
-    <input type="button" id="play" value="play"/>
-    <input type="button" id="pause" value="pause"/>
+    <input type="button" id="play" value="play" class="btn btn-success"/>
+    <input type="button" id="pause" value="pause" class="btn btn-danger"/>
     <div id="display" class="scrollable dragdropper"></div>
     <!--<div id="drop_zone" class="dragdropper">Drop Song, Grammar And Audio File Here</div> -->
     <audio controls id="player" style="display: none;"/>
