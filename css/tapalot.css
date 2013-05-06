@@ -33,6 +33,8 @@ a,
   border-radius:         5px;
   -moz-border-radius:    5px;
   -webkit-border-radius: 5px;
+  width: 100%;
+  height: 100%;
 }
 
 .song_line {
