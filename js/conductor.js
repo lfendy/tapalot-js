@@ -52,12 +52,12 @@
   };
 
   var checkTriggers = function(){
-    var currentTime = $.tapalot.timeSlice.getTotalSeconds(player.audioPlayer('getCurrentTime'));
-    if(currentTimeSliceBeingChecked != undefined && (currentTimeSliceBeingChecked.startTime + viewDelay) <= currentTime){
+    var currentTime = player.audioPlayer('getCurrentTime').totalSeconds;
+    if(currentTimeSliceBeingChecked != undefined && (currentTimeSliceBeingChecked.startTime.totalSeconds + viewDelay) <= currentTime){
 
       var idx = _.indexOf(timeSlices.flat, currentTimeSliceBeingChecked);
       var nextSlice = timeSlices.flat[idx+1];
-      var delta = nextSlice.startTime - currentTimeSliceBeingChecked.startTime;
+      var delta = nextSlice.startTime.differenceWith(currentTimeSliceBeingChecked.startTime).totalSeconds;
       var heartbeatDuration = delta / (currentTimeSliceBeingChecked.repetition * currentTimeSliceBeingChecked.numberOfBeats);
       setTimeout(function(){
         clearHeartbeat();
@@ -83,7 +83,7 @@
 
   var skipTo = function(idxSection, idxLine){
     var slice = timeSlices.hierarchical[idxSection][idxLine];
-    player.audioPlayer('setCurrentTime', slice.startTime + viewDelay);
+    player.audioPlayer('setCurrentTime', slice.startTime.delayBy(viewDelay));
     currentTimeSliceBeingChecked = slice;
     clearHeartbeat();
   };

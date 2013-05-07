@@ -26,16 +26,13 @@
     return this;
   };
 
-  var setCurrentTime = function(songLocation){
-    player.currentTime = songLocation;
+  var setCurrentTime = function(time){
+    player.currentTime = time.totalSeconds;
     return this;
   };
 
   var getCurrentTime = function(){
-    var time = player.currentTime;
-    var minutes = Math.floor(time / 60);
-    var seconds = time - (minutes * 60);
-    return { minutes:minutes, seconds:seconds };
+    return $.tapalot.time(player.currentTime);
   };
 
   var methods = {

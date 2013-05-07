@@ -9,7 +9,7 @@
   };
 
   var hasStartTime = function(songLine){
-    return songLine.startTime != null && songLine.startTime.minutes != null;
+    return songLine.startTime != null;
   };
 
 
@@ -25,7 +25,7 @@
     var renderLine = function(songLine){
       var repetition = songLine.repetition;
       var text = songLine.lineText;
-      var startTime = hasStartTime(songLine) ? " @" + songLine.startTime.minutes + ":" + songLine.startTime.seconds : "";
+      var startTime = hasStartTime(songLine) ? " @" + songLine.startTime.string : "";
       return repetition + "x " + text + startTime;
     };
 
@@ -47,7 +47,7 @@
 
     var renderStartTime = function(songLine){
       var $timeDiv = $(document.createElement('div'));
-      var timeText = " @" + songLine.startTime.minutes + ":" + (songLine.startTime.seconds.toFixed(2));
+      var timeText = " @" + songLine.startTime.string;
       $timeDiv
         .append(timeText)
         .addClass(SONGTIME);

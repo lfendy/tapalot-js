@@ -1,9 +1,5 @@
 (function($){
 
-  var getTotalSeconds = function(startTime){
-    return (parseInt(startTime.minutes) * 60) + parseFloat(startTime.seconds);
-  };
-
   var getPreviousTimeSlices = function(allTimeSlices, timeSlice){
     return _.filter(allTimeSlices, function(ts){
       return ts.section <= timeSlice.section && ts.line < timeSlice.line;
@@ -16,17 +12,21 @@
     });
   };
 
+  var hasStartTime = function(timeSlice){
+    return timeSlice.startTime != null;
+  };
+
   var getFirstPreceedingSliceWithStartTime = function(allTimeSlices, timeSlice){
     var previousSlices = getPreviousTimeSlices(allTimeSlices, timeSlice);
     return _.last(_.filter(previousSlices, function(ts){
-      return !isNaN(ts.startTime);
+      return hasStartTime(ts);
     }));
   };
 
   var getFirstSucceedingSliceWithStartTime = function(allTimeSlices, timeSlice){
     var nextSlices = getNextTimeSlices(allTimeSlices, timeSlice);
     return _.first(_.filter(nextSlices, function(ts){
-      return !isNaN(ts.startTime);
+      return hasStartTime(ts);
     }));
   };
 
@@ -52,7 +52,7 @@
   var getMostRecentTempo = function(allTimeSlices, timeSlice){
     var prevSlice = getFirstPreceedingSliceWithStartTime(allTimeSlices, timeSlice);
     var prevprevSlice = getFirstPreceedingSliceWithStartTime(allTimeSlices, prevSlice);
-    var delta = prevSlice.startTime - prevprevSlice.startTime;
+    var delta = prevSlice.startTime.differenceWith(prevprevSlice.startTime).totalSeconds;
     return delta / prevprevSlice.repetition;
   };
 
@@ -63,18 +63,18 @@
     if(nextTimeSlice != undefined){
       var nextReps = getSumOfNextRepetitions(allTimeSlices, timeSlice);
       var nextTime = nextTimeSlice.startTime;
-      var delta = nextTime - previousTime;
+      var delta = nextTime.differenceWith(previousTime).totalSeconds;
       var ratio = prevReps / (prevReps + nextReps);
-      timeSlice.startTime = previousTime + (ratio * delta);
+      timeSlice.startTime = $.tapalot.time(previousTime.totalSeconds + (ratio * delta));
     } else {
       var secondsPerBar = getMostRecentTempo(allTimeSlices, timeSlice);
-      timeSlice.startTime = previousTime + (prevReps * secondsPerBar);
+      timeSlice.startTime = $.tapalot.time(previousTime.totalSeconds + (prevReps * secondsPerBar));
     }
   };
 
   var fillAllStartTime = function(allTimeSlices){
     var emptySlices = _.filter(allTimeSlices, function(ts){
-      return isNaN(ts.startTime);
+      return !hasStartTime(ts);
     });
     _.each(emptySlices, function(ts){
       fillStartTime(allTimeSlices, ts);
@@ -88,7 +88,7 @@
         return {
           section: idxSection,
           line: idxLine,
-          startTime: getTotalSeconds(songLine.startTime),
+          startTime: songLine.startTime,
           repetition: songLine.repetition,
           numberOfBeats: section.timeSignature.beats
         };
@@ -105,8 +105,7 @@
 
   $.tapalot = $.tapalot || {};
   $.tapalot.timeSlice = {
-    createTimeSlices: createTimeSlices,
-    getTotalSeconds: getTotalSeconds
+    createTimeSlices: createTimeSlices
   };
 
 
