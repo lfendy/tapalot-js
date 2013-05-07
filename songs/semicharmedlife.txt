@@ -1,16 +1,20 @@
 4/4
-1x Intro (x2) @0:00
-1x +Backing Vocals (x2) @0:10
-1x Verse 1  "I'm packed and I'm holding" @0:20
-1x Chorus "I want something else" @0:48
-1x Verse 2 "The sky it was gold, it was rose " @1:16
-1x Bridge "How do I get back there" @1:36
-1x Chorus "I want something else" @1:45
-1x Verse 3 "I believe in the sand beneath my toes" @2:04
-1x Bridge "When the plane came in" @2:24
-1x Middle 8 "And you hold me" @2:43
-1x Verse 4 "Feel myself" @2:50
-1x Chorus (quiet) "I want something else" @3:10
-1x "Goodbye" @3:20
-1x "The sky it was gold" @4:02
-1x Outro
+4x Intro (x2)   @0:1.77
+4x Doo Doo Doo....   @0:11.10
+12x Verse 1  "I'm packed and I'm holding"   @0:20.50
+8x Chorus "I want something else"   @0:48.83
+4x Doo Doo Doo....
+8x Verse 2 "The sky it was gold, it was rose "   @1:16.89
+4x Bridge "How do I get back there"   @1:35.82
+8x Chorus "I want something else"   @1:45.21
+8x Verse 3 "I believe in the sand beneath my toes"   @2:4.10
+8x Bridge "When the plane came in"   @2:22.82
+4x Middle 8 "And you hold me"   @2:41.63
+8x Verse 4 "Feel myself"   @2:51.05
+8x Chorus (quiet) "I want something else"   @3:9.85
+10x "Goodbye"   @3:28.70
+4x Doo Doo Doo .... @3:52.26
+4x "The sky it was gold"   @4:1.63
+4x Doo Doo Doo .... @4:11.03
+2x Outro  @4:20.44
+1x End  @4:25.10
