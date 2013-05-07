@@ -12,19 +12,17 @@
   const CHECK_TRIGGERS_DURATION_MS = 10
 
   // hack... States ?
-  var currentTimeSliceBeingChecked;
-
+  var nextSliceToHighlight;
 
   var heartbeat = {
     progressForRepetition: 0,
     display: "",
     beats: 0
   };
-  var triggerHeartbeat = function(numberOfBeats){
+  var triggerHeartbeat = function(beatsPerBar){
     var trigger = function(){
-      var idx = _.indexOf(timeSlices.flat, currentTimeSliceBeingChecked);
-      var currentSlice = timeSlices.flat[idx-1];
-      if(heartbeat.beats % numberOfBeats == 0) {
+      var currentSlice = $.tapalot.timeSlice.getPreviousTimeSlice(timeSlices, nextSliceToHighlight);
+      if(heartbeat.beats % beatsPerBar == 0) {
         heartbeat.progressForRepetition += 1;
         heartbeat.display = "(" + heartbeat.progressForRepetition + "/" + currentSlice.repetition + ")";
       } else {
@@ -45,29 +43,32 @@
     clearInterval(heartbeatInterval);
   };
 
-  var startHeartbeat = function(duration, numberOfBeats){
-    var trigger = triggerHeartbeat(numberOfBeats);
+  var startHeartbeat = function(duration, beatsPerBar){
+    var trigger = triggerHeartbeat(beatsPerBar);
     trigger();
     heartbeatInterval = setInterval(trigger, duration);
   };
 
   var checkTriggers = function(){
     var currentTime = player.audioPlayer('getCurrentTime').totalSeconds;
-    if(currentTimeSliceBeingChecked != undefined && (currentTimeSliceBeingChecked.startTime.totalSeconds + viewDelay) <= currentTime){
+    if(nextSliceToHighlight != undefined && (nextSliceToHighlight.startTime.totalSeconds + viewDelay) <= currentTime){
 
-      var idx = _.indexOf(timeSlices.flat, currentTimeSliceBeingChecked);
-      var nextSlice = timeSlices.flat[idx+1];
-      var delta = nextSlice.startTime.differenceWith(currentTimeSliceBeingChecked.startTime).totalSeconds;
-      var heartbeatDuration = delta / (currentTimeSliceBeingChecked.repetition * currentTimeSliceBeingChecked.numberOfBeats);
+      var heartbeatDuration = nextSliceToHighlight.heartbeatDuration * 1000;
+      var beatsPerBar = nextSliceToHighlight.beatsPerBar;
       setTimeout(function(){
         clearHeartbeat();
-        startHeartbeat(heartbeatDuration * 1000, currentTimeSliceBeingChecked.numberOfBeats);
+        startHeartbeat(heartbeatDuration, beatsPerBar);
       }, (-1 * viewDelay) * 1000);
 
-      display.trigger('highlightLine', [currentTimeSliceBeingChecked.section, currentTimeSliceBeingChecked.line]);
+      display.trigger('highlightLine', [nextSliceToHighlight.section, nextSliceToHighlight.line]);
 
-      currentTimeSliceBeingChecked = nextSlice;
+      nextSliceToHighlight = $.tapalot.timeSlice.getNextTimeSlice(timeSlices, nextSliceToHighlight);
     }
+  };
+
+  var clearTriggerIntervals = function(){
+    clearInterval(checkTriggersInterval);
+    clearHeartbeat();
   };
 
   var play = function(){
@@ -77,14 +78,18 @@
 
   var pause = function(){
     player.audioPlayer('pause');
-    clearInterval(checkTriggersInterval);
-    clearHeartbeat();
+    clearTriggerIntervals();
+  };
+
+  var ended = function(){
+    clearTriggerIntervals();
+    nextSliceToHighlight = timeSlices.flat[0];
   };
 
   var skipTo = function(idxSection, idxLine){
     var slice = timeSlices.hierarchical[idxSection][idxLine];
     player.audioPlayer('setCurrentTime', slice.startTime.delayBy(viewDelay));
-    currentTimeSliceBeingChecked = slice;
+    nextSliceToHighlight = slice;
     clearHeartbeat();
   };
   var setViewDelay = function(delay){};
@@ -109,11 +114,12 @@
   var init = function(givenSongStructure, givenPlayer, givenViewDelay){
     viewDelay = givenViewDelay;
     player = givenPlayer;
+    player.audioPlayer('ended', ended);
     songStructure = givenSongStructure;
     display = this;
     timeSlices = $.tapalot.timeSlice.createTimeSlices(songStructure);
-    window.tapalotDebug.timeSlices = timeSlices;
-    currentTimeSliceBeingChecked = timeSlices.flat[0];
+    $.tapalot.debug.timeSlices = timeSlices;
+    nextSliceToHighlight = timeSlices.flat[0];
     display.on("click", "." + PLAYABLE, handleClickSongLine);
     return this;
   };

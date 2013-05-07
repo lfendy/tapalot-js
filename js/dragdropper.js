@@ -31,7 +31,7 @@
     var processAudio = function(f){
       var url = URL.createObjectURL(f);
       var data = {url: url}
-      $this.trigger("receivedMP3", data);
+      $this.trigger("receivedAudio", data);
     };
 
     var processFile = function(f){

@@ -4,6 +4,7 @@
     <script type="text/javascript" src="./js/external/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="./js/external/peg-0.7.0.min.js"></script>
     <script type="text/javascript" src="./js/external/bootstrap.js"></script>
+    <script type="text/javascript" src="./js/debug.js"></script>
     <script type="text/javascript" src="./js/time.js"></script>
     <script type="text/javascript" src="./js/time_slice.js"></script>
     <script type="text/javascript" src="./js/create_plugin.js"></script>
@@ -154,7 +155,7 @@
 
       $(".dragdropper")
         .dragdropper()
-        .on("receivedMP3", handleReceivedAudio)
+        .on("receivedAudio", handleReceivedAudio)
         .on("receivedPEG", handleReceivedGrammar)
         .on("receivedTXT", handleReceivedSongStructure);
 
@@ -188,8 +189,11 @@
         });
       });
 
-      //TODO: refactor totalSeconds -- introduce a time class that can produce different formats
       //TODO: introduce endTime to timeSlices -- so only need to track one timeSlice (for checking time and displaying heartbeat. also less confusing because 'current' is misleading"
+      //TODO: introduced timeKeeper, decouple conductor and audioPlayer
+      //TODO: time scaling ?
+      //TODO: added actual delay?
+      //TODO: fix end song -- automatic rewind ?
 
 
      })(jQuery);

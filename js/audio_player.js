@@ -26,6 +26,11 @@
     return this;
   };
 
+  var ended = function(endedFunction){
+    this.on("ended", endedFunction);
+    return this;
+  };
+
   var setCurrentTime = function(time){
     player.currentTime = time.totalSeconds;
     return this;
@@ -40,6 +45,7 @@
     pause: pause,
     play: play,
     rewind: rewind,
+    ended: ended,
     getCurrentTime: getCurrentTime,
     setCurrentTime: setCurrentTime,
     setSongSource: setSongSource
