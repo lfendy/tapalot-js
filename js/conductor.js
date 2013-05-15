@@ -82,9 +82,9 @@
 
   var skipTo = function(idxSection, idxLine){
     var slice = timeSlices.hierarchical[idxSection][idxLine];
-    player.audioPlayer('setCurrentTime', slice.startTime.delayBy(animationDelay));
-    nextSliceToHighlight = slice;
+    player.audioPlayer('setCurrentTime', slice.startTime);
     clearHeartbeat();
+    nextSliceToHighlight = slice;
   };
   var setViewDelay = function(delay){};
 
