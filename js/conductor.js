@@ -4,11 +4,10 @@
 
   var songStructure;
   var player;
-  var viewDelay;
+  var animationDelay;
   var timeSlices;
   var display;
   var checkTriggersInterval;
-  var heartbeatInterval;
   const CHECK_TRIGGERS_DURATION_MS = 10
 
   // hack... States ?
@@ -19,19 +18,16 @@
     display: "",
     beats: 0
   };
-  var triggerHeartbeat = function(beatsPerBar){
-    var trigger = function(){
-      var currentSlice = $.tapalot.timeSlice.getPreviousTimeSlice(timeSlices, nextSliceToHighlight);
-      if(heartbeat.beats % beatsPerBar == 0) {
-        heartbeat.progressForRepetition += 1;
-        heartbeat.display = "(" + heartbeat.progressForRepetition + "/" + currentSlice.repetition + ")";
-      } else {
-        heartbeat.display = heartbeat.display + ".";
-      }
-      heartbeat.beats += 1;
-      display.trigger('heartbeat', heartbeat.display);
-    };
-    return trigger;
+  var triggerHeartbeat = function(beatsPerBar, currentSlice){
+    var currentSlice = $.tapalot.timeSlice.getPreviousTimeSlice(timeSlices, nextSliceToHighlight);
+    if(heartbeat.beats % beatsPerBar == 0) {
+      heartbeat.progressForRepetition += 1;
+      heartbeat.display = "(" + heartbeat.progressForRepetition + "/" + currentSlice.repetition + ")";
+    } else {
+      heartbeat.display = heartbeat.display + ".";
+    }
+    heartbeat.beats += 1;
+    display.trigger('heartbeat', heartbeat.display);
   };
 
   var clearHeartbeat = function(){
@@ -40,35 +36,33 @@
       display: "",
       beats: 0
     };
-    clearInterval(heartbeatInterval);
   };
 
-  var startHeartbeat = function(duration, beatsPerBar){
-    var trigger = triggerHeartbeat(beatsPerBar);
-    trigger();
-    heartbeatInterval = setInterval(trigger, duration);
-  };
-
+  var triggeringHighlightTheFirstTime = true;
   var checkTriggers = function(){
     var currentTime = player.audioPlayer('getCurrentTime').totalSeconds;
-    if(nextSliceToHighlight != undefined && (nextSliceToHighlight.startTime.totalSeconds + viewDelay) <= currentTime){
-
-      var heartbeatDuration = nextSliceToHighlight.heartbeatDuration * 1000;
-      var beatsPerBar = nextSliceToHighlight.beatsPerBar;
-      setTimeout(function(){
+    var ns = nextSliceToHighlight;
+    var cs = $.tapalot.timeSlice.getPreviousTimeSlice(timeSlices, nextSliceToHighlight);
+    if(ns != undefined){
+      if(cs != undefined && (ns.startTime.totalSeconds - ((cs.totalBeats - heartbeat.beats) * cs.heartbeatDuration)) <= currentTime){
+        triggerHeartbeat(ns.beatsPerBar, cs);
+      }
+      if(ns.startTime.delayBy(animationDelay).totalSeconds <= currentTime){
+        if(triggeringHighlightTheFirstTime){
+          display.trigger('highlightLine', [ns.section, ns.line]);
+          triggeringHighlightTheFirstTime = false;
+        }
+      }
+      if(ns.startTime.totalSeconds <= currentTime){
         clearHeartbeat();
-        startHeartbeat(heartbeatDuration, beatsPerBar);
-      }, (-1 * viewDelay) * 1000);
-
-      display.trigger('highlightLine', [nextSliceToHighlight.section, nextSliceToHighlight.line]);
-
-      nextSliceToHighlight = $.tapalot.timeSlice.getNextTimeSlice(timeSlices, nextSliceToHighlight);
+        nextSliceToHighlight = $.tapalot.timeSlice.getNextTimeSlice(timeSlices, ns);
+        triggeringHighlightTheFirstTime = true;
+      }
     }
   };
 
   var clearTriggerIntervals = function(){
     clearInterval(checkTriggersInterval);
-    clearHeartbeat();
   };
 
   var play = function(){
@@ -88,7 +82,7 @@
 
   var skipTo = function(idxSection, idxLine){
     var slice = timeSlices.hierarchical[idxSection][idxLine];
-    player.audioPlayer('setCurrentTime', slice.startTime.delayBy(viewDelay));
+    player.audioPlayer('setCurrentTime', slice.startTime.delayBy(animationDelay));
     nextSliceToHighlight = slice;
     clearHeartbeat();
   };
@@ -111,8 +105,8 @@
     skipTo(idxSection, idxLine);
   };
 
-  var init = function(givenSongStructure, givenPlayer, givenViewDelay){
-    viewDelay = givenViewDelay;
+  var init = function(givenSongStructure, givenPlayer, givenAnimationDelay){
+    animationDelay = givenAnimationDelay;
     player = givenPlayer;
     player.audioPlayer('ended', ended);
     songStructure = givenSongStructure;

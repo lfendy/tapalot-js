@@ -98,7 +98,7 @@
     return allTimeSlices;
   };
 
-  var fillHeartBeatDuration = function(allTimeSlices){
+  var fillHeartBeatDurationAndTotalBeats = function(allTimeSlices){
     _.each(allTimeSlices, function(slice, idx, slices){
       var delta = 0;
       var nextSlice = slices[idx + 1]
@@ -109,6 +109,7 @@
         delta = secondsPerBar * slice.repetition;
       }
       var totalBeats = slice.repetition * slice.beatsPerBar;
+      slice.totalBeats = totalBeats;
       slice.heartbeatDuration = delta / totalBeats;
     });
   };
@@ -127,7 +128,7 @@
     });
     var flatTimeSlices = _.flatten(hierarchicalTimeSlices);
     fillAllStartTime(flatTimeSlices);
-    fillHeartBeatDuration(flatTimeSlices);
+    fillHeartBeatDurationAndTotalBeats(flatTimeSlices);
     return {
       hierarchical: hierarchicalTimeSlices,
       flat: flatTimeSlices
