@@ -1,5 +1,4 @@
 
-
 @-webkit-keyframes pulseanimation {
   0%, 100%   { opacity: 1; }
   5%        { opacity: 0.3; }
@@ -13,11 +12,55 @@
 }
 
 
-.heartbeat {
+
+@-webkit-keyframes beatanimation {
+  0%   {
+    opacity: 1;
+    -webkit-transform: scale(1.5);
+    -webkit-transform-origin: 1 1;
+
+  }
+  100%        {
+    opacity: 0.3;
+    -webkit-transform: scale(1.0);
+  }
+}
+
+.beat {
+  -webkit-animation-name: 'beatanimation';
+  -webkit-animation-duration: 300ms;
+  -webkit-animation-iteration-count: 1;
+  -webkit-animation-timing-function: ease-out;
+}
+
+#container {
+  position:relative;
+  width: 100%;
+  height: 80px;
+}
+
+#tempo {
+  position:absolute;
+  top:20%;
+  left:0%;
+  width: 120px;
+  float: left;
+  opacity: 0.3;
+  text-align: center;
+}
+
+.heartbeat_font {
   font:        32pt 'Courier New';
   font-weight: bold;
-  position:    relative;
-  display:     block;
+}
+
+#heartbeat {
+  position:absolute;
+  top:50%;
+  left:30%;
+  float: left;
+  height: 100%;
+  width: 400px;
 }
 a,
 .heartbeat.inline {

@@ -17,10 +17,17 @@
     <link rel="stylesheet" type="text/css" media="screen" href="./css/tapalot.css"/>
   </head>
   <body>
-    <div id="heartbeat" class="heartbeat">
-      X
+
+    <div id="container">
+      <div id="tempo" class="heartbeat_font">
+        !!
+      </div>
+      <div id="heartbeat" class="heartbeat_font">
+        X
+      </div>
     </div>
 
+    <div class="clearfix"></div>
     <label class="checkbox">
       <input type="checkbox" id="composingModeCheckbox">Composing mode</input>
     </label>
@@ -40,7 +47,6 @@
 
       $.tapalot = $.tapalot || {};
       $.tapalot.debug = $.tapalot.debug || {};
-
 
       var player = $("#player").audioPlayer();
 
@@ -85,8 +91,11 @@
       };
 
       var $heartbeat = $("#heartbeat");
+      var $tempo = $("#tempo");
       var handleHeartbeat = function(evt, whatToShow){
         $heartbeat.text(whatToShow);
+        $tempo.removeClass('beat');
+        setTimeout(function(){$tempo.addClass('beat')}, 1);
       }
 
       var handleHighlightLine = function(evt, idxSection, idxLine){
