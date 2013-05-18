@@ -48,7 +48,8 @@
       $.tapalot = $.tapalot || {};
       $.tapalot.debug = $.tapalot.debug || {};
 
-      var player = $("#player").audioPlayer();
+      var $player = $("#player").audioPlayer();
+      var $display = $("#display");
 
       var parser = null;
       var rawSongStructure = null;
@@ -58,7 +59,7 @@
       var handleDownloadSongClick = function(evt){
         evt.preventDefault();
         evt.stopImmediatePropagation();
-        var song = $("#display").renderer('renderText', songStructure);
+        var song = $display.renderer('renderText', songStructure);
         var blob = new Blob([song], {type: "text/plain"}); //this is a memory leak
 
         var downloader = $("#hiddenDownloader");
@@ -71,13 +72,13 @@
       };
 
       var changeToComposingMode = function(){
-        $("#display")
+        $display
           .composer('enable')
           .conductor('disable');
       };
 
       var changeToPlayingMode = function(){
-        $("#display")
+        $display
           .composer('disable')
           .conductor('enable');
       };
@@ -99,13 +100,13 @@
       }
 
       var handleHighlightLine = function(evt, idxSection, idxLine){
-        $("#display").renderer("highlightLine", idxSection, idxLine);
+        $display.renderer("highlightLine", idxSection, idxLine);
       };
 
       var handleRerenderLine = function(evt, songLine){
         var $target = $(evt.target);
-        $("#display").children().removeClass("pulse");
-        $("#display").renderer("rerenderLine", $target, songLine);
+        $display.children().removeClass("pulse");
+        $display.renderer("rerenderLine", $target, songLine);
         $("#" + $target.attr("id")).addClass("pulse");
       };
 
@@ -129,11 +130,11 @@
         if(parser != null && rawSongStructure != null){
           songStructure = parser.parse(rawSongStructure);
           wrapWithTimeObject(songStructure);
-          $("#display")
+          $display
             .renderer(songStructure)
-            .composer(songStructure, player)
+            .composer(songStructure, $player)
             .on("rerenderLine", handleRerenderLine)
-            .conductor(songStructure, player, (-1 * ANIMATION_DELAY))
+            .conductor(songStructure, $player, (-1 * ANIMATION_DELAY))
             .conductor("enable")
             .on("highlightLine", handleHighlightLine)
             .on("heartbeat", handleHeartbeat);
@@ -143,7 +144,7 @@
 
       var handleReceivedAudio = function(evt, data){
         console.log("received audio");
-        player.audioPlayer("setSongSource", data.url);
+        $player.audioPlayer("setSongSource", data.url);
       };
 
       var handleReceivedGrammar = function(evt, data){
@@ -177,18 +178,18 @@
       $("#play")
         .on("click", function(){
             if($("#composingModeCheckbox").is(":checked")){
-              $("#player").audioPlayer("play");
+              $player.audioPlayer("play");
             } else {
-              $("#display").conductor("play");
+              $display.conductor("play");
             }
         });
 
       $("#pause")
         .on("click", function(){
             if($("#composingModeCheckbox").is(":checked")){
-              $("#player").audioPlayer("pause");
+              $player.audioPlayer("pause");
             } else {
-              $("#display").conductor("pause");
+              $display.conductor("pause");
             }
         });
 
