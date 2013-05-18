@@ -1,37 +1,27 @@
 4/4
-4x keys   @0:0.8987640142440796
-4x keys + synth  @0:8.587526321411133
-1x weird beat (drums)  @0:16.247650146484375
-6x Hard guitar (d bass + hh)  @0:17.9455623626709
-1x Hard guitar pitch up (drum fill at 4)  @0:29.399240493774414
-4x Du..... Du hast ---- end with reverse cymbal (HH + D bass only at vocal)  @0:31.34159278869629
-4x Du..... Du Hast ---- end with reverse cymbal (HH + D bass only at vocal)  @0:38.95352554321289
-4x Du..... Du Hast (D bass at every beat)  @0:46.70930862426758
-4x Du..... Du Hast (D bass at every beat)  @0:54.397369384765625
-1x reverse cymbal / silence  @1:2.0695457458496094
-6x Hard guitar (d bass + hh)  @1:4.045555114746094
-1x Hard guitar pitch up (drum fill at 4)  @1:15.471511840820312
-4x Du..... Du Hast (D bass at every beat)  @1:17.387191772460938
-2x Du hast mich gefragt  @1:25.093338012695312
-1x Du hast mich gefragt, und ich hab  @1:28.90960693359375
-1x nichts gesagt!  @1:30.843093872070312
-4x Willst du bis der Tod euch scheidet, treu ihr sein für alle Tage  @1:32.75752258300781
-4x Jaaaaaa Nein, Jaaaaaa Nein  @1:40.421470642089844
-4x Willst du bis der Tod euch scheidet, treu ihr sein für alle Tage  @1:48.09965515136719
-4x Jaaaaaa Nein, Jaaaaaa Nein  @1:55.757652282714844
-8x Keys + Drums  @2:3.4235153198242188
-4x Du..... Du hast (vocal + keys only)  @2:18.789474487304688
-4x Du..... Du hast (vocal + keys only)  @2:26.525360107421875
-4x Du..... Du Hast   @2:34.173553466796875
-2x Du hast mich gefragt  @2:41.85162353515625
-1x Du hast mich gefragt, und ich hab  @2:45.67765808105469
-1x nichts gesagt!  @2:47.61956787109375
-6x (New drums + Hard Guitar -vocal out)  @2:49.50132751464844
-2x Drum Fill  @3:0.9294891357421875
-4x Willst du bis der Tod euch scheidet, treu ihr sein für alle Tage  @3:4.8234405517578125
-4x Jaaaaaa Nein, Jaaaaaa Nein  @3:12.501754760742188
-4x Willst du bis der Tod euch scheidet, sie lieben auch in schlecten Tagen  @3:20.192916870117188
-4x Jaaaaaa Nein, Jaaaaaa Nein  @3:27.875564575195312
-4x Willst du bis der Tod euch scheidet, treu ihr sein…………….  @3:35.51954650878906
-4x Jaaaaaa Nein, Jaaaaaa Nein  @3:43.231475830078125
-2x Keys only  @3:50.91569519042969
+4x keys    @0:0.50
+4x keys + synth   @0:8.30
+1x weird beat    @0:16.00
+7x Guitar    @0:18.01
+8x (Verse 1) Du..... Du Hast (HH + D bass only at vocal)   @0:31.42
+8x (Verse 1) Du..... Du Hast (D bass at every beat)   @0:46.78
+1x reverse cymbal / silence   @1:2.09
+7x Guitar    @1:4.03
+7x (Verse 2) Du..... Du Hast (D bass at every beat)   @1:17.44
+1x (Verse 2) -- instrument out --
+4x (Chorus) Willst du bis der Tod euch scheidet, treu ihr sein für alle Tage   @1:32.77
+4x (Chorus) Jaaaaaa Nein, Jaaaaaa Nein   @1:40.42
+4x (Chorus) Willst du bis der Tod euch scheidet, treu ihr sein für alle Tage   @1:48.16
+4x (Chorus) Jaaaaaa Nein, Jaaaaaa Nein   @1:55.80
+8x Keys + Drums   @2:3.49
+8x (Verse 1) Du..... Du hast (vocal + keys only)   @2:18.84
+8x (Verse 2) Du..... Du Hast (guitar in + HH)   @2:34.16
+6x New drums + Guitar   @2:49.50
+2x Drum Fill   @3:1.01
+4x (Chorus) Willst du bis der Tod euch scheidet, treu ihr sein für alle Tage   @3:4.85
+4x (Chorus) Jaaaaaa Nein, Jaaaaaa Nein   @3:12.51
+4x (Chorus) Willst du bis der Tod euch scheidet, sie lieben auch in schlecten Tagen   @3:20.19
+4x (Chorus) Jaaaaaa Nein, Jaaaaaa Nein   @3:27.88
+4x (Chorus) Willst du bis der Tod euch scheidet, treu ihr sein......   @3:35.54
+4x (Chorus) Jaaaaaa Nein, Jaaaaaa Nein  
+2x Keys only   @3:50.90
