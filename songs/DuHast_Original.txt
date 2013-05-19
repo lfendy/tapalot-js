@@ -1,27 +1,19 @@
 4/4
-4x keys    @0:0.50
-4x keys + synth   @0:8.30
-1x weird beat    @0:16.00
-7x Guitar    @0:18.01
-8x (Verse 1) Du..... Du Hast (HH + D bass only at vocal)   @0:31.42
-8x (Verse 1) Du..... Du Hast (D bass at every beat)   @0:46.78
-1x reverse cymbal / silence   @1:2.09
-7x Guitar    @1:4.03
-7x (Verse 2) Du..... Du Hast (D bass at every beat)   @1:17.44
+4x keys   @0:0.50
+4x keys + synth  @0:8.30
+1x weird beat   @0:15.90
+7x Guitar   @0:18.01
+8x (Verse 1) Du..... Du Hast (HH + D bass only at vocal)  @0:31.42
+8x (Verse 1) Du..... Du Hast (D bass at every beat)  @0:46.78
+1x reverse cymbal / silence  @1:2.09
+7x Guitar   @1:4.03
+7x (Verse 2) Du..... Du Hast (D bass at every beat)  @1:17.44
 1x (Verse 2) -- instrument out --
-4x (Chorus) Willst du bis der Tod euch scheidet, treu ihr sein für alle Tage   @1:32.77
-4x (Chorus) Jaaaaaa Nein, Jaaaaaa Nein   @1:40.42
-4x (Chorus) Willst du bis der Tod euch scheidet, treu ihr sein für alle Tage   @1:48.16
-4x (Chorus) Jaaaaaa Nein, Jaaaaaa Nein   @1:55.80
-8x Keys + Drums   @2:3.49
-8x (Verse 1) Du..... Du hast (vocal + keys only)   @2:18.84
-8x (Verse 2) Du..... Du Hast (guitar in + HH)   @2:34.16
-6x New drums + Guitar   @2:49.50
-2x Drum Fill   @3:1.01
-4x (Chorus) Willst du bis der Tod euch scheidet, treu ihr sein für alle Tage   @3:4.85
-4x (Chorus) Jaaaaaa Nein, Jaaaaaa Nein   @3:12.51
-4x (Chorus) Willst du bis der Tod euch scheidet, sie lieben auch in schlecten Tagen   @3:20.19
-4x (Chorus) Jaaaaaa Nein, Jaaaaaa Nein   @3:27.88
-4x (Chorus) Willst du bis der Tod euch scheidet, treu ihr sein......   @3:35.54
-4x (Chorus) Jaaaaaa Nein, Jaaaaaa Nein  
-2x Keys only   @3:50.90
+16x (Chorus)*2 Willst du bis...  @1:32.77
+8x Keys + Drums  @2:3.49
+8x (Verse 1) Du..... Du hast (vocal + keys only)  @2:18.84
+8x (Verse 2) Du..... Du Hast (guitar in + HH)  @2:34.16
+6x New drums + Guitar  @2:49.50
+2x Drum Fill  @3:1.01
+24x (Chorus)*3 Willst du bis...  @3:4.85
+2x Keys only  @3:50.90
