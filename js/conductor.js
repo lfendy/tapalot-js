@@ -19,7 +19,6 @@
     beats: 0
   };
   var triggerHeartbeat = function(beatsPerBar, currentSlice){
-    var currentSlice = $.tapalot.timeSlice.getPreviousTimeSlice(timeSlices, nextSliceToHighlight);
     if(heartbeat.beats % beatsPerBar == 0) {
       heartbeat.progressForRepetition += 1;
       heartbeat.display = "(" + heartbeat.progressForRepetition + "/" + currentSlice.repetition + ")";
