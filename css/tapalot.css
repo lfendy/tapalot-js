@@ -59,7 +59,6 @@
   top:50%;
   left:30%;
   float: left;
-  height: 100%;
   width: 400px;
 }
 a,
@@ -83,9 +82,9 @@ a,
 .song_line {
   color: #222;
   font: 18pt 'Arial';
-  transition-property: color, font;
-  transition-duration: 0.6s;
-  transition-timing-funtion: linear, ease-in;
+  -webkit-transition-property: color, font;
+  -webkit-transition-duration: 0.6s;
+  -webkit-transition-timing-funtion: linear, ease-in;
 }
 
 .song_time {

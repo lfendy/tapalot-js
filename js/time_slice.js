@@ -18,13 +18,13 @@
 
   var getPreviousTimeSlices = function(allTimeSlices, timeSlice){
     return _.filter(allTimeSlices, function(ts){
-      return ts.section <= timeSlice.section && ts.line < timeSlice.line;
+      return ts.section < timeSlice.section || (ts.section == timeSlice.section && ts.line < timeSlice.line);
     });
   };
 
   var getNextTimeSlices = function(allTimeSlices, timeSlice){
     return _.filter(allTimeSlices, function(ts){
-      return ts.section >= timeSlice.section && ts.line > timeSlice.line;
+      return ts.section > timeSlice.section || (ts.section == timeSlice.section && ts.line > timeSlice.line);
     });
   };
 
@@ -127,6 +127,7 @@
       });
     });
     var flatTimeSlices = _.flatten(hierarchicalTimeSlices);
+    $.tapalot.debug.flatTimeSlices = flatTimeSlices;
     fillAllStartTime(flatTimeSlices);
     fillHeartBeatDurationAndTotalBeats(flatTimeSlices);
     return {

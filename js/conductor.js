@@ -8,7 +8,7 @@
   var timeSlices;
   var display;
   var checkTriggersInterval;
-  const CHECK_TRIGGERS_DURATION_MS = 10
+  const CHECK_TRIGGERS_DURATION_MS = 20
 
   // hack... States ?
   var nextSliceToHighlight;
@@ -45,7 +45,7 @@
     var cs = $.tapalot.timeSlice.getPreviousTimeSlice(timeSlices, nextSliceToHighlight);
     if(ns != undefined){
       if(cs != undefined && (ns.startTime.totalSeconds - ((cs.totalBeats - heartbeat.beats) * cs.heartbeatDuration)) <= currentTime){
-        triggerHeartbeat(ns.beatsPerBar, cs);
+        triggerHeartbeat(cs.beatsPerBar, cs);
       }
       if(ns.startTime.delayBy(animationDelay).totalSeconds <= currentTime){
         if(triggeringHighlightTheFirstTime){
@@ -83,7 +83,6 @@
   var skipTo = function(idxSection, idxLine){
     var slice = timeSlices.hierarchical[idxSection][idxLine];
     player.audioPlayer('setCurrentTime', slice.startTime);
-    clearHeartbeat();
     nextSliceToHighlight = slice;
   };
   var setViewDelay = function(delay){};

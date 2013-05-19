@@ -16,6 +16,11 @@
       $this.trigger("receivedPEG", data);
     };
 
+    var handleFinishReadingAudio = function(evt){
+      var data = {url: evt.target.result}
+      $this.trigger("receivedAudio", data);
+    }
+
     var processTXT = function(f){
       var fr = new FileReader();
       fr.onload = handleFinishReadingTXT;
@@ -29,9 +34,21 @@
     };
 
     var processAudio = function(f){
-      var url = URL.createObjectURL(f);
-      var data = {url: url}
-      $this.trigger("receivedAudio", data);
+
+      var isChrome = function(){
+        return window.hasOwnProperty('URL');
+      };
+
+      $.tapalot.debug.song_file = f;
+
+      if(isChrome()){
+        var data = {url: URL.createObjectURL(f)}
+        $this.trigger("receivedAudio", data);
+      } else {
+        var fr = new FileReader();
+        fr.onloadend = handleFinishReadingAudio;
+        fr.readAsDataURL(f);
+      }
     };
 
     var processFile = function(f){
