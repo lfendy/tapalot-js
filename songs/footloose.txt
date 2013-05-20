@@ -1,6 +1,6 @@
 4/4
 4x Drum/Clap intro   @0:0.00
-4x Add bass   @0:5.79
+4x Add bass   @0:5.70
 4x Add guitar   @0:11.21
 10x Add second guitar   @0:16.76
 24x Verse 1   @0:30.59
@@ -9,10 +9,7 @@
 22x Verse 2   @1:29.87
 15x Chorus   @2:0.18
 8x Bridge (drums and backing vocals)   @2:20.84
-14x Add vocals   @2:31.85
-2/4
-1x [break]
-4/4
-24x Chorus   @2:52.58
-8x Outro   @3:30.00
-1x End   @3:43.68
+15x Add vocals   @2:31.85
+28x Chorus   @2:52.62
+7x Outro   @3:31.20
+1x End   @3:40.91
