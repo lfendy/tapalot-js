@@ -1,0 +1,15 @@
+4/4
+12x Bass Intro  @0:0.20
+4x Enter drums  @0:18.64
+16x Enter Guitar  @0:24.67
+2x [break] one.. two.. three @0:49.79
+16x (Verse 1) @0:52.94
+16x (Verse 2) @1:18.55
+16x (Chorus) Burn Burn.. @1:44.09
+2x [break] one.. two.. three.. @2:9.17
+16x (Verse 3) @2:12.31
+16x (Chorus) Burn Burn.. @2:37.60
+4x [break] @3:2.67
+16x bridge @3:8.88
+16x (Chorus) Burn Burn.. @3:33.85
+1x END @3:58.80
